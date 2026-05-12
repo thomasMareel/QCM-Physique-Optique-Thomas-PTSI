@@ -1,0 +1,3219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Révisions Optique PTSI — Thomas (Géométrique + Ondes)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+  :root {
+    --paper: #f4ede0;
+    --paper-deep: #ebe1ce;
+    --ink: #1a2540;
+    --ink-soft: #3c4663;
+    --accent: #d94f37;
+    --accent-deep: #b03826;
+    --success: #2f6b3f;
+    --rule: #c9bca0;
+    --shadow: 0 1px 0 rgba(26,37,64,.04), 0 12px 28px -16px rgba(26,37,64,.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+
+  body {
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(26,37,64,.06) 31px, rgba(26,37,64,.06) 32px),
+      radial-gradient(ellipse at top left, rgba(217,79,55,.04), transparent 50%);
+    padding: 40px 20px 80px;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* ====== EN-TÊTE ====== */
+  .masthead {
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 20px 0 16px;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .masthead-left .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .masthead-left h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .masthead-left h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .masthead-right {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  /* ====== ÉCRAN D'ACCUEIL ====== */
+  .intro-card {
+    background: #fffaf0;
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    padding: 40px 36px;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .intro-card::before {
+    content: "";
+    position: absolute;
+    top: -1px; left: -1px; right: -1px;
+    height: 6px;
+    background: var(--accent);
+  }
+
+  .intro-card h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .intro-card p {
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .rules {
+    list-style: none;
+    margin: 24px 0;
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+    padding: 16px 0;
+  }
+
+  .rules li {
+    padding: 8px 0;
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+  }
+
+  .rules li::before {
+    content: counter(rule, decimal-leading-zero);
+    counter-increment: rule;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 28px;
+  }
+
+  .rules { counter-reset: rule; }
+
+  .name-field {
+    margin: 24px 0;
+  }
+
+  .name-field label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .name-field input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--ink);
+    padding: 8px 0;
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .name-field input:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 16px 28px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: transform .15s, background .2s;
+    box-shadow: 0 4px 0 var(--accent-deep);
+  }
+
+  .btn:hover {
+    background: var(--accent);
+    transform: translate(0, -1px);
+  }
+
+  .btn:active {
+    transform: translate(0, 2px);
+    box-shadow: 0 2px 0 var(--accent-deep);
+  }
+
+  .btn.secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+    box-shadow: none;
+  }
+
+  .btn.secondary:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* ====== ÉCRAN QUIZ ====== */
+  .quiz-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--paper);
+    padding: 16px 0 14px;
+    margin: -8px 0 28px;
+    border-bottom: 1px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-wrap {
+    flex: 1;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--paper-deep);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width .3s ease;
+  }
+
+  .timer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 8px 14px;
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    background: #fffaf0;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  .timer.warning { color: var(--accent); border-color: var(--accent); }
+  .timer.critical {
+    color: #fff;
+    background: var(--accent);
+    border-color: var(--accent);
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .question-card {
+    background: #fffaf0;
+    border: 1px solid var(--rule);
+    padding: 32px 32px 28px;
+    margin-bottom: 24px;
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .question-card .level-tag {
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    background: var(--paper);
+    padding: 2px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--rule);
+  }
+
+  .question-card .q-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  .question-card .q-text {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+
+  .options {
+    display: grid;
+    gap: 10px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 1.5px solid var(--rule);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all .15s;
+    background: #fff;
+    font-size: 16px;
+  }
+
+  .option:hover {
+    border-color: var(--ink);
+    transform: translateX(2px);
+  }
+
+  .option input {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--ink-soft);
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color .15s;
+  }
+
+  .option input:checked {
+    border-color: var(--accent);
+    border-width: 5px;
+  }
+
+  .option:has(input:checked) {
+    border-color: var(--accent);
+    background: rgba(217,79,55,.04);
+  }
+
+  .option .opt-letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+
+  .option:has(input:checked) .opt-letter { color: var(--accent); }
+
+  .option .opt-text { flex: 1; }
+
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    gap: 12px;
+  }
+
+  /* ====== ÉCRAN RÉSULTATS ====== */
+  .results-hero {
+    text-align: center;
+    padding: 48px 24px 40px;
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 40px;
+  }
+
+  .results-hero .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .results-hero .score-big {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: clamp(80px, 16vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+
+  .results-hero .score-big .sep {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .results-hero .score-big .max {
+    font-size: 0.5em;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
+  .results-hero .verdict {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-soft);
+    margin-top: 16px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    margin-bottom: 48px;
+    border: 1px solid var(--rule);
+  }
+
+  .stat {
+    background: #fffaf0;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+
+  .stat .stat-value {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 600;
+  }
+
+  .stat .stat-value.good { color: var(--success); }
+  .stat .stat-value.bad { color: var(--accent); }
+
+  .review-section h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 28px;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .review-section .subtitle {
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  .review-item {
+    background: #fffaf0;
+    border: 1px solid var(--rule);
+    border-left: 4px solid;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    border-radius: 2px;
+  }
+
+  .review-item.correct { border-left-color: var(--success); }
+  .review-item.wrong { border-left-color: var(--accent); }
+  .review-item.skipped { border-left-color: var(--ink-soft); }
+
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .review-header .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+  }
+
+  .review-header .status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .status.correct { color: var(--success); background: rgba(47,107,63,.1); }
+  .status.wrong { color: var(--accent); background: rgba(217,79,55,.1); }
+  .status.skipped { color: var(--ink-soft); background: rgba(60,70,99,.08); }
+
+  .review-item .q-text {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .review-answers {
+    font-size: 14px;
+    color: var(--ink-soft);
+    display: grid;
+    gap: 4px;
+  }
+
+  .review-answers strong { color: var(--ink); font-weight: 600; }
+  .review-answers .answer-correct { color: var(--success); font-weight: 600; }
+  .review-answers .answer-wrong { color: var(--accent); text-decoration: line-through; }
+
+  .end-actions {
+    margin-top: 48px;
+    text-align: center;
+  }
+
+  /* ====== UTILS ====== */
+  .hidden { display: none !important; }
+
+  /* MATH RENDERING */
+  .math {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+  }
+  .frac {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0 2px;
+  }
+  .frac .num {
+    display: block;
+    border-bottom: 1.5px solid currentColor;
+    padding: 0 4px 1px;
+    font-size: 0.9em;
+  }
+  .frac .den {
+    display: block;
+    padding: 1px 4px 0;
+    font-size: 0.9em;
+  }
+  sup { font-size: 0.75em; vertical-align: super; line-height: 0; }
+  sub { font-size: 0.75em; vertical-align: sub; line-height: 0; }
+
+  /* ====== TEASER NIVEAU 2 SUR L'ACCUEIL ====== */
+  .level2-teaser {
+    margin: 24px 0;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, rgba(26,37,64,.92), rgba(26,37,64,.98));
+    color: var(--paper);
+    border-radius: 2px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .level2-teaser::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent);
+  }
+
+  .teaser-badge {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    padding: 4px 10px;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    margin-top: 2px;
+  }
+
+  .teaser-content { flex: 1; font-size: 14px; line-height: 1.5; }
+  .teaser-content strong { display: block; margin-bottom: 4px; color: var(--paper); font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; }
+  .teaser-content span { color: rgba(244,237,224,.7); }
+
+  /* Champ requis */
+  .name-field .required { color: var(--accent); }
+  .name-error {
+    display: none;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .name-error.show { display: block; }
+  .name-field input.error { border-color: var(--accent); }
+
+  /* ====== ÉCRAN D'AVERTISSEMENT BONUS ====== */
+  .warning-card {
+    background: #fffaf0;
+    border: 1px solid var(--ink);
+    border-left: 6px solid var(--accent);
+    padding: 44px 40px;
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .warning-card .warning-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .warning-card h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 38px);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .warning-card h2 em { font-style: italic; color: var(--accent); font-weight: 400; }
+
+  .warning-card .intro-text {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .warning-points {
+    display: grid;
+    gap: 14px;
+    margin: 28px 0;
+    padding: 20px 0;
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+  }
+
+  .warning-point {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .warning-point .icon {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 14px;
+  }
+
+  .warning-point .text { flex: 1; padding-top: 4px; font-size: 15px; line-height: 1.5; }
+  .warning-point .text strong { color: var(--ink); }
+
+  .warning-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .bonus-cta {
+    margin-top: 32px;
+    padding: 28px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bonus-cta::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(217,79,55,.25), transparent 70%);
+    pointer-events: none;
+  }
+
+  .bonus-cta .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .bonus-cta h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+    position: relative;
+  }
+
+  .bonus-cta h3 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .bonus-cta p {
+    color: rgba(244,237,224,.75);
+    margin-bottom: 20px;
+    position: relative;
+    max-width: 520px;
+  }
+
+  .bonus-cta .btn {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 0 var(--accent-deep);
+    position: relative;
+  }
+
+  .bonus-cta .btn:hover {
+    background: #fff;
+    color: var(--ink);
+  }
+
+  /* Bandeau "Mode Bonus" sur l'écran quiz */
+  body.bonus-mode .masthead-left h1 em { color: var(--accent); }
+  body.bonus-mode {
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(26,37,64,.06) 31px, rgba(26,37,64,.06) 32px),
+      radial-gradient(ellipse at top right, rgba(217,79,55,.08), transparent 50%);
+  }
+
+  .bonus-banner {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 20px;
+    margin: -8px 0 24px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .bonus-banner .bonus-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .bonus-banner .bonus-sub {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(244,237,224,.75);
+  }
+
+  .question-card.bonus-card {
+    border-color: var(--ink);
+    border-left: 4px solid var(--accent);
+  }
+
+  .question-card.bonus-card .level-tag {
+    color: var(--accent);
+    border-color: var(--ink);
+    font-weight: 600;
+  }
+
+  .question-card.bonus-card .q-text {
+    font-size: 19px;
+    line-height: 1.5;
+  }
+
+  /* Bloc indication dans le compte-rendu bonus */
+  .review-hint {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: rgba(26,37,64,.04);
+    border-left: 2px solid var(--ink-soft);
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .review-hint strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .review-hint .step-label {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 8px;
+    margin-bottom: 2px;
+  }
+
+  .review-hint .formula {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    padding: 2px 6px;
+    background: rgba(217,79,55,.08);
+    border-radius: 2px;
+  }
+
+  /* Schémas SVG dans les corrections */
+  .review-schema {
+    margin: 14px 0 0;
+    padding: 16px;
+    background: #fffefa;
+    border: 1px dashed var(--rule);
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .review-schema svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .review-schema .schema-caption {
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* Bouton de téléchargement PDF */
+  .download-cta {
+    margin-top: 40px;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, #fffaf0, #f4ede0);
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .download-cta .download-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .download-cta .download-text { flex: 1; min-width: 200px; }
+  .download-cta .download-text strong {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+  .download-cta .download-text span {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .download-cta .download-text .recommend {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 8px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+
+  /* Section bonus dans les résultats finaux */
+  .bonus-results-section {
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 2px solid var(--ink);
+  }
+
+  .bonus-score-line {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .bonus-score-line .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .bonus-score-line .score {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .bonus-score-line .score .sep {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .bonus-score-line .score .max {
+    font-size: 0.5em;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
+  /* ====== BOUTON PAUSE ====== */
+  .timer-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pause-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 8px 14px;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background-color .15s, color .15s;
+    white-space: nowrap;
+  }
+
+  .pause-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .pause-btn-dark {
+    border-color: rgba(244,237,224,.5);
+    color: var(--paper);
+  }
+
+  .pause-btn-dark:hover {
+    background: rgba(244,237,224,.15);
+    color: var(--paper);
+    border-color: var(--paper);
+  }
+
+  /* Overlay de pause */
+  .pause-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(26,37,64,.85);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .pause-overlay.active {
+    display: flex;
+  }
+
+  .pause-card {
+    background: var(--paper);
+    padding: 48px 36px 36px;
+    border-radius: 4px;
+    text-align: center;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 24px 48px rgba(0,0,0,.3);
+    animation: pauseIn .2s ease-out;
+  }
+
+  @keyframes pauseIn {
+    from { opacity: 0; transform: scale(.92) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .pause-icon {
+    font-size: 56px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+
+  .pause-card h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .pause-card p {
+    color: var(--ink-soft);
+    margin: 0 0 28px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .pause-card .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Timer en état pausé */
+  .timer.paused {
+    opacity: 0.5;
+    text-decoration: line-through;
+  }
+
+  /* ====== BLOC DE RÉPONSE OUVERTE ====== */
+  .question-card.open-card {
+    border-left: 4px solid var(--accent);
+  }
+
+  .open-answer-block {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px dashed var(--rule);
+  }
+
+  .open-answer-block label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+
+  .open-input {
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid var(--rule);
+    padding: 14px 16px;
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    color: var(--ink);
+    outline: none;
+    border-radius: 2px;
+    transition: border-color .15s, box-shadow .15s;
+    font-style: italic;
+  }
+
+  .open-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(217,79,55,.1);
+  }
+
+  .open-help {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .open-help code {
+    background: rgba(26,37,64,.06);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 20px 14px 60px; }
+    .intro-card, .question-card { padding: 24px 20px; }
+    .quiz-header { flex-direction: column; align-items: stretch; }
+    .timer { text-align: center; }
+    .nav-buttons { flex-direction: column-reverse; }
+    .nav-buttons .btn { width: 100%; justify-content: center; }
+    .bonus-cta { padding: 22px; }
+    .bonus-cta h3 { font-size: 22px; }
+    .open-input { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="masthead">
+    <div class="masthead-left">
+      <div class="eyebrow">Révisions PTSI · Thomas</div>
+      <h1>Optique <em>en 20 questions</em></h1>
+    </div>
+    <div class="masthead-right">
+      Géométrique · Ondes<br>
+      Durée — 45 min<br>
+      Notation /20
+    </div>
+  </header>
+
+  <!-- ========== ÉCRAN 1 : ACCUEIL ========== -->
+  <section id="screen-intro">
+    <div class="intro-card">
+      <h2>Avant de commencer</h2>
+      <p>Test compact de révisions d'Optique (PTSI) : <strong>optique géométrique</strong> (réfraction, lentilles minces, miroirs, systèmes optiques) <strong>et ondes lumineuses</strong> (interférences, fentes d'Young, cohérence). 20 questions au total — 10 QCM d'échauffement puis 10 questions à réponse libre.</p>
+
+      <ol class="rules">
+        <li>Durée : <strong>45 min</strong>. Le test s'arrête automatiquement à zéro.</li>
+        <li>10 QCM (4 choix), puis 10 questions à <strong>saisir</strong> (numérique ou littéral).</li>
+        <li>Saisie tolérante : virgule/point pour les décimaux, <span class="formula">sqrt</span> ou <span class="formula">√</span>, <span class="formula">^</span> ou <span class="formula">**</span>, casse ignorée. Pour les signes négatifs : <span class="formula">-15</span> ou <span class="formula">−15</span> indifféremment.</li>
+        <li>Bouton <strong>⏸ Pause</strong> dispo à tout moment (raccourci <code>P</code>).</li>
+        <li>Note finale sur 20 + correction détaillée avec schémas à la fin.</li>
+      </ol>
+
+      <div class="level2-teaser">
+        <div class="teaser-badge">★ Niveau 2</div>
+        <div class="teaser-content">
+          <strong>Niveau concours derrière.</strong>
+          <span>10 problèmes type CCINP / Mines / Centrale — tracés de rayons, doublets, miroirs, lame mince dans Young, lumière blanche, longueur de cohérence. 1h30, noté /20.</span>
+        </div>
+      </div>
+
+      <div class="name-field">
+        <label for="student-name">Ton prénom <span class="required">*</span></label>
+        <input type="text" id="student-name" value="Thomas" placeholder="Écris ton prénom ici…" autocomplete="off" required>
+        <div class="name-error" id="name-error">Merci d'indiquer ton prénom pour commencer.</div>
+      </div>
+
+      <button class="btn" id="btn-start">Commencer l'épreuve →</button>
+    </div>
+  </section>
+
+  <!-- ========== ÉCRAN 2 : QUIZ ========== -->
+  <section id="screen-quiz" class="hidden">
+    <div class="quiz-header">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="progress-text">Question 1 / 20</span>
+          <span id="progress-percent">5%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <div class="timer-wrap">
+        <button class="pause-btn" id="btn-pause" type="button" title="Mettre le test en pause" aria-label="Mettre en pause">⏸ Pause</button>
+        <div class="timer" id="timer">45:00</div>
+      </div>
+    </div>
+
+    <div class="pause-overlay" id="pause-overlay">
+      <div class="pause-card">
+        <div class="pause-icon">⏸</div>
+        <h3>Test en pause</h3>
+        <p>Le chrono est arrêté. Reprends quand tu es prête.</p>
+        <button class="btn" id="btn-resume">▶ Reprendre</button>
+      </div>
+    </div>
+
+    <div id="question-container"></div>
+
+    <div class="nav-buttons">
+      <button class="btn secondary" id="btn-prev">← Précédent</button>
+      <button class="btn" id="btn-next">Suivant →</button>
+    </div>
+  </section>
+
+  <!-- ========== ÉCRAN AVERTISSEMENT BONUS ========== -->
+  <section id="screen-bonus-intro" class="hidden">
+    <div class="warning-card">
+      <div class="warning-eyebrow">★ Niveau 2 — Avertissement</div>
+      <h2>Tu entres en <em>conditions concours</em></h2>
+      <p class="intro-text">10 problèmes type CCINP / Mines / Centrale en optique géométrique et ondes lumineuses. Tracés de rayons, doublets de lentilles, miroirs sphériques, interférences à deux ondes. Niveau réaliste d'épreuve écrite.</p>
+
+      <div class="warning-points">
+        <div class="warning-point">
+          <div class="icon">1</div>
+          <div class="text"><strong>Conventions de signes.</strong> Vérifie systématiquement le sens de l'axe optique, le signe de OA (objet réel : OA < 0) et de f'. La moitié des erreurs en optique géométrique vient de là.</div>
+        </div>
+        <div class="warning-point">
+          <div class="icon">2</div>
+          <div class="text"><strong>1h30 pour 10 problèmes</strong>, soit ~9 min par problème. Fais un schéma au brouillon : c'est souvent ce qui débloque le calcul.</div>
+        </div>
+        <div class="warning-point">
+          <div class="icon">3</div>
+          <div class="text"><strong>Tracés des 3 rayons usuels.</strong> Pour vérifier une image : rayon parallèle à l'axe → passe par F' ; rayon par O → tout droit ; rayon par F → ressort parallèle.</div>
+        </div>
+        <div class="warning-point">
+          <div class="icon">4</div>
+          <div class="text"><strong>Interférences :</strong> raisonne d'abord en différence de marche δ, puis en déphasage Δφ = 2πδ/λ. Pour Young, attention au piège : 11 franges = 10 interfranges.</div>
+        </div>
+        <div class="warning-point">
+          <div class="icon">5</div>
+          <div class="text"><strong>Note finale sur 20.</strong> 2 points par problème — précision dans les signes et les unités récompensée.</div>
+        </div>
+      </div>
+
+      <div class="warning-actions">
+        <button class="btn secondary" id="btn-back-results">← Retour aux résultats</button>
+        <button class="btn" id="btn-start-bonus-confirm">Je suis prêt(e), c'est parti →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ÉCRAN 2 BIS : QUIZ BONUS (avec timer 1h30) ========== -->
+  <section id="screen-bonus" class="hidden">
+    <div class="bonus-banner">
+      <div>
+        <div class="bonus-label">Niveau 2 · Concours</div>
+        <div class="bonus-sub">10 problèmes — 1h30 chrono</div>
+      </div>
+      <div class="timer-wrap">
+        <button class="pause-btn pause-btn-dark" id="btn-bonus-pause" type="button" title="Mettre le test en pause" aria-label="Mettre en pause">⏸ Pause</button>
+        <div class="timer" id="bonus-timer" style="background: rgba(244,237,224,.1); color: var(--paper); border-color: rgba(244,237,224,.3);">1:30:00</div>
+      </div>
+    </div>
+
+    <div class="pause-overlay" id="bonus-pause-overlay">
+      <div class="pause-card">
+        <div class="pause-icon">⏸</div>
+        <h3>Test en pause</h3>
+        <p>Le chrono est arrêté. Reprends quand tu es prête.</p>
+        <button class="btn" id="btn-bonus-resume">▶ Reprendre</button>
+      </div>
+    </div>
+
+    <div class="quiz-header" style="margin-top: 0; padding-top: 0; border-bottom: 1px solid var(--ink);">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="bonus-progress-text">Question 1 / 10</span>
+          <span id="bonus-progress-percent">10%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="bonus-progress-fill"></div></div>
+      </div>
+    </div>
+
+    <div id="bonus-question-container"></div>
+
+    <div class="nav-buttons">
+      <button class="btn secondary" id="btn-bonus-prev">← Précédent</button>
+      <button class="btn" id="btn-bonus-next">Suivant →</button>
+    </div>
+  </section>
+
+  <!-- ========== ÉCRAN 3 : RÉSULTATS ========== -->
+  <section id="screen-results" class="hidden">
+    <div class="results-hero">
+      <div class="eyebrow">Résultat final</div>
+      <div class="score-big">
+        <span id="final-score">0</span><span class="sep">/</span><span class="max">20</span>
+      </div>
+      <div class="verdict" id="verdict">—</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-label">Bonnes</div>
+        <div class="stat-value good" id="stat-correct">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Fausses</div>
+        <div class="stat-value bad" id="stat-wrong">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Sans rép.</div>
+        <div class="stat-value" id="stat-skipped">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Temps</div>
+        <div class="stat-value" id="stat-time">—</div>
+      </div>
+    </div>
+
+    <div class="review-section">
+      <h2>Compte-rendu détaillé</h2>
+      <p class="subtitle">La bonne réponse et une courte explication pour chaque question.</p>
+      <div id="review-list"></div>
+    </div>
+
+    <!-- Bloc CTA Bonus, affiché seulement si le niveau n'a pas encore été joué -->
+    <div id="bonus-cta-wrapper"></div>
+
+    <!-- Bloc résultats bonus, affiché seulement après avoir joué le bonus -->
+    <div id="bonus-results-wrapper"></div>
+
+    <!-- Bloc téléchargement PDF -->
+    <div class="download-cta" id="download-cta">
+      <div class="download-icon">↓</div>
+      <div class="download-text">
+        <strong>Télécharge tes résultats en PDF</strong>
+        <span>Le fichier contient ton prénom, la date, tes notes et la correction complète avec schémas.</span>
+        <span class="recommend">Recommandé — à envoyer à ton grand frère</span>
+      </div>
+      <button class="btn" id="btn-download-pdf">Télécharger le PDF</button>
+    </div>
+
+    <div class="end-actions">
+      <button class="btn secondary" id="btn-restart">Recommencer l'épreuve</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// ============================================================
+//  BANQUE NIVEAU 1 — 20 questions (10 QCM + 10 ouvertes)
+//  Optique géométrique + Ondes lumineuses (PTSI)
+// ============================================================
+const QUESTIONS = [
+
+  // ============================================
+  // BLOC 1 — 10 QCM D'ÉCHAUFFEMENT
+  // ============================================
+
+  // 1 - Loi de Snell-Descartes
+  { type: 'qcm', chapitre: 'Réfraction',
+    question: 'La loi de Snell-Descartes de la réfraction s\'écrit :',
+    options: ['n₁ sin i₁ = n₂ sin i₂', 'n₁ cos i₁ = n₂ cos i₂', 'n₁ tan i₁ = n₂ tan i₂', 'n₁/i₁ = n₂/i₂'],
+    correct: 0,
+    explication: "n₁ sin i₁ = n₂ sin i₂ avec les angles mesurés par rapport à la normale au dioptre. Le rayon réfracté reste dans le plan d'incidence." },
+
+  // 2 - Réflexion totale
+  { type: 'qcm', chapitre: 'Réfraction',
+    question: 'On passe d\'un milieu d\'indice n₁ = 1,5 (verre) vers n₂ = 1 (air). À partir d\'un certain angle, le rayon ne se réfracte plus. Ce phénomène s\'appelle :',
+    options: ['Diffraction', 'Réflexion totale', 'Réfraction critique', 'Polarisation'],
+    correct: 1,
+    explication: "Réflexion totale : se produit quand on passe d'un milieu plus réfringent (n₁) à moins réfringent (n₂), au-delà de l'angle limite i_lim = arcsin(n₂/n₁). Principe des fibres optiques." },
+
+  // 3 - Formule de conjugaison (Descartes, lentille mince)
+  { type: 'qcm', chapitre: 'Lentilles minces',
+    question: 'La relation de conjugaison de Descartes pour une lentille mince de centre O et de distance focale image f\' s\'écrit :',
+    options: [
+      "1/OA' − 1/OA = 1/f'",
+      "1/OA' + 1/OA = 1/f'",
+      "OA' − OA = f'",
+      "1/OA' − 1/OA = f'"
+    ],
+    correct: 0,
+    explication: "1/OA' − 1/OA = 1/f' avec les mesures algébriques sur l'axe orienté dans le sens de propagation. Toujours vérifier le signe de OA (objet réel → OA < 0)." },
+
+  // 4 - Vergence
+  { type: 'qcm', chapitre: 'Lentilles minces',
+    question: 'Une lentille a une distance focale f\' = 50 cm. Sa vergence vaut :',
+    options: ['0,02 δ', '0,5 δ', '2 δ', '50 δ'],
+    correct: 2,
+    explication: "V = 1/f' avec f' en mètres, V en dioptries (δ). V = 1/0,5 = 2 δ. Lentille convergente (f' > 0)." },
+
+  // 5 - Convergente vs divergente
+  { type: 'qcm', chapitre: 'Lentilles minces',
+    question: 'Une lentille divergente est caractérisée par :',
+    options: [
+      "f' > 0",
+      "f' < 0",
+      "f' = 0",
+      "f' = +∞"
+    ],
+    correct: 1,
+    explication: "Lentille divergente : f' < 0 (vergence négative). Son foyer image F' est avant la lentille (côté objet). Les rayons parallèles divergent après traversée." },
+
+  // 6 - Image d'un objet à l'infini
+  { type: 'qcm', chapitre: 'Lentilles minces',
+    question: 'Un objet est à l\'infini sur l\'axe optique d\'une lentille convergente. Son image est :',
+    options: [
+      "Au centre optique O",
+      "Au foyer objet F",
+      "Au foyer image F\'",
+      "À l\'infini aussi"
+    ],
+    correct: 2,
+    explication: "Tout faisceau parallèle à l'axe (objet à l'infini sur l'axe) converge au foyer image F'. C'est la définition même de F'." },
+
+  // 7 - Miroir plan
+  { type: 'qcm', chapitre: 'Miroirs',
+    question: 'L\'image d\'un objet réel par un miroir plan est :',
+    options: [
+      "Réelle, droite, même taille",
+      "Réelle, inversée, même taille",
+      "Virtuelle, droite, même taille",
+      "Virtuelle, inversée, agrandie"
+    ],
+    correct: 2,
+    explication: "Miroir plan : image VIRTUELLE (derrière le miroir, donc impossible à recueillir sur écran), DROITE, de même taille. Symétrique de l'objet par rapport au plan du miroir." },
+
+  // 8 - Différence de marche pour les fentes de Young
+  { type: 'qcm', chapitre: 'Interférences · Young',
+    question: 'Dans une expérience de Young, la différence de marche entre les deux ondes au point M de l\'écran s\'exprime (a = écartement des fentes, D = distance fentes-écran, x = position sur l\'écran) :',
+    options: ['δ = ax/D', 'δ = aD/x', 'δ = xD/a', 'δ = a + x − D'],
+    correct: 0,
+    explication: "Pour D >> a et x petit (approximation gaussienne) : δ = ax/D. On en déduit l'interfrange i = λD/a (distance entre deux franges brillantes consécutives)." },
+
+  // 9 - Interfrange
+  { type: 'qcm', chapitre: 'Interférences · Young',
+    question: 'L\'interfrange i dans une expérience de Young vaut :',
+    options: ['i = a/(λD)', 'i = λa/D', 'i = λD/a', 'i = aD/λ'],
+    correct: 2,
+    explication: "i = λD/a. Pour observer des franges : on prend D grand (~1 m) et a petit (~0,1 mm), pour λ visible (~500 nm) on obtient i ~ 5 mm." },
+
+  // 10 - Condition d'interférences constructives
+  { type: 'qcm', chapitre: 'Interférences',
+    question: 'Deux ondes cohérentes interfèrent de manière constructive si leur différence de marche δ vaut :',
+    options: ['kλ avec k entier', '(2k+1)λ/2 avec k entier', 'kλ/2 avec k entier', 'λ uniquement'],
+    correct: 0,
+    explication: "Interférences CONSTRUCTIVES : δ = kλ (frange brillante). Interférences DESTRUCTIVES : δ = (k+½)λ (frange sombre). Le déphasage est Δφ = 2πδ/λ." },
+
+  // ============================================
+  // BLOC 2 — 10 QUESTIONS OUVERTES
+  // ============================================
+
+  // 11 - Angle limite de réflexion totale
+  { type: 'open', chapitre: 'Réfraction · Réflexion totale',
+    question: 'Un rayon passe d\'un verre d\'indice <span class="math">n = 1,5</span> vers l\'air. <strong>Calculer l\'angle limite i<sub>lim</sub> de réflexion totale</strong> (en degrés, à 0,1° près).',
+    correct: ['41.8', '41,8', '41.81', '41,81'],
+    tolerance: 0.05,
+    placeholder: 'En degrés…',
+    explication: "Angle limite : n₁ sin(i_lim) = n₂ sin(90°) = n₂. Donc sin(i_lim) = n₂/n₁ = 1/1,5 = 2/3. i_lim = arcsin(2/3) ≈ 41,8°. Au-delà, le rayon est totalement réfléchi." },
+
+  // 12 - Position d'image (Descartes)
+  { type: 'open', chapitre: 'Lentilles minces',
+    question: 'Lentille convergente <span class="math">f\' = 10 cm</span>, objet AB placé à <span class="math">OA = -30 cm</span> (objet réel). <strong>Calculer OA\'</strong> (en cm, signe inclus).',
+    correct: ['15', '+15'],
+    tolerance: 0.05,
+    placeholder: 'OA\' en cm (avec signe)…',
+    explication: "1/OA' − 1/OA = 1/f'. 1/OA' = 1/f' + 1/OA = 1/10 + 1/(-30) = 3/30 − 1/30 = 2/30 = 1/15. Donc OA' = 15 cm. Image réelle (OA' > 0)." },
+
+  // 13 - Grandissement
+  { type: 'open', chapitre: 'Lentilles minces',
+    question: 'Même configuration que la question précédente (<span class="math">f\' = 10 cm</span>, OA = −30 cm, OA\' = 15 cm). <strong>Calculer le grandissement γ</strong>.',
+    correct: ['-0.5', '-0,5', '−0.5', '−0,5', '-1/2'],
+    tolerance: 0.001,
+    placeholder: 'Valeur de γ…',
+    explication: "γ = OA'/OA = 15/(-30) = -0,5. Image deux fois plus petite, et inversée (γ < 0). Caractéristique du cas où l'objet est au-delà de 2f' devant la lentille." },
+
+  // 14 - Vergence d'un système accolé
+  { type: 'open', chapitre: 'Lentilles minces · Accolées',
+    question: 'Deux lentilles minces accolées de vergences <span class="math">V<sub>1</sub> = +5 δ</span> et <span class="math">V<sub>2</sub> = -2 δ</span>. <strong>Donner la vergence équivalente V</strong> (en δ).',
+    correct: ['3', '+3'],
+    tolerance: 0.001,
+    placeholder: 'En dioptries…',
+    explication: "Lentilles minces accolées : les vergences s'ajoutent. V = V₁ + V₂ = 5 + (−2) = 3 δ. La distance focale équivalente vaut f' = 1/V ≈ 33 cm." },
+
+  // 15 - Interfrange numérique
+  { type: 'open', chapitre: 'Young',
+    question: 'Fentes de Young : <span class="math">a = 0,5 mm</span>, <span class="math">D = 2,0 m</span>, <span class="math">λ = 600 nm</span>. <strong>Calculer l\'interfrange i</strong> (en mm, à 0,01 près).',
+    correct: ['2.4', '2,4'],
+    tolerance: 0.05,
+    placeholder: 'Interfrange en mm…',
+    explication: "i = λD/a = (600×10⁻⁹ × 2,0)/(0,5×10⁻³) = (1,2×10⁻⁶)/(5×10⁻⁴) = 2,4×10⁻³ m = 2,4 mm. Largement observable à l'œil nu." },
+
+  // 16 - Longueur d'onde dans le visible
+  { type: 'open', chapitre: 'Ondes lumineuses',
+    question: 'Le spectre visible va environ de <strong>?</strong> nm (violet) à <strong>?</strong> nm (rouge). Donner les deux bornes séparées d\'un tiret : ex. "400-750".',
+    correct: ['400-750', '400-800', '380-780', '400 - 750', '380-750'],
+    placeholder: 'Format : "400-750"…',
+    explication: "Spectre visible ≈ 400 nm (violet) à 750-800 nm (rouge). Au-delà, c'est l'infrarouge (IR) ; en-deçà, l'ultraviolet (UV). Bornes approximatives car dépendent de la sensibilité de l'œil." },
+
+  // 17 - Condition de cohérence
+  { type: 'open', chapitre: 'Cohérence',
+    question: 'Pour observer des interférences stables avec deux sources, il faut qu\'elles soient <strong>?</strong>. (Mot-clé en un seul mot)',
+    correct: ['cohérentes', 'coherentes', 'cohérente', 'coherente', 'synchrones'],
+    placeholder: 'Mot-clé…',
+    explication: "Deux sources sont COHÉRENTES si elles présentent une différence de phase constante au cours du temps. En pratique : on dédouble une seule source (Young, Michelson) pour garantir la cohérence." },
+
+  // 18 - Différence de marche pour frange sombre
+  { type: 'open', chapitre: 'Interférences',
+    question: 'Deux ondes cohérentes de longueur d\'onde <span class="math">λ = 600 nm</span> interfèrent. La <strong>plus petite différence de marche δ > 0</strong> donnant une frange sombre vaut <strong>?</strong> (en nm).',
+    correct: ['300'],
+    tolerance: 0.001,
+    placeholder: 'En nm…',
+    explication: "Frange sombre : δ = (k + ½)λ. Plus petit positif : k = 0, donc δ = λ/2 = 300 nm. C'est aussi la moitié de l'interfrange en termes de positions." },
+
+  // 19 - Image d'un objet à l'infini par lentille convergente
+  { type: 'open', chapitre: 'Lentilles minces',
+    question: 'Un objet est à l\'infini, ses rayons font un angle <span class="math">θ = 2°</span> avec l\'axe optique. La lentille convergente a <span class="math">f\' = 50 mm</span>. <strong>Calculer la taille A\'B\' de l\'image</strong> (en mm, à 0,1 près).',
+    correct: ['1.7', '1,7', '1.74', '1,74', '1.75', '1,75'],
+    tolerance: 0.1,
+    placeholder: 'Taille en mm…',
+    explication: "Image dans le plan focal image. Taille : A'B' = f' × tan(θ) ≈ f' × θ(rad) = 50 × (2×π/180) ≈ 50 × 0,0349 ≈ 1,75 mm. Approximation des petits angles." },
+
+  // 20 - Phase et différence de marche
+  { type: 'open', chapitre: 'Interférences',
+    question: 'Le déphasage <span class="math">Δφ</span> entre deux ondes, leur différence de marche δ et la longueur d\'onde λ sont reliés par <strong>Δφ = ?</strong>. (Formule littérale)',
+    correct: ['2πδ/λ', '2pi*δ/λ', '2π*δ/λ', '2*pi*delta/lambda', '2πδ/lambda', '2*π*δ/λ'],
+    placeholder: 'Formule…',
+    explication: "Δφ = (2π/λ)·δ = k·δ avec k = 2π/λ le vecteur d'onde. Une différence de marche δ = λ correspond à Δφ = 2π (un tour complet, donc on retombe sur des interférences constructives)." }
+];
+
+// ============================================================
+//  BANQUE BONUS — 10 problèmes type concours
+//  Mix CCINP / Mines / Centrale, Optique PTSI
+//  Schémas SVG inline pour les configurations complexes
+// ============================================================
+const BONUS_QUESTIONS = [
+
+  // ===== PROBLÈME 1 : Lentille convergente, image réelle =====
+  { type: 'open', chapitre: 'Lentille convergente',
+    question: 'Un objet AB de taille <span class="math">1 cm</span> est placé à <span class="math">40 cm</span> devant une lentille convergente de <span class="math">f\' = 15 cm</span>. <strong>Donner la position de l\'image A\'B\' par rapport à O</strong> (en cm, signe inclus, à 0,1 près).',
+    correct: ['24', '24.0', '24,0'],
+    tolerance: 0.1,
+    placeholder: 'OA\' en cm (signe inclus)…',
+    solution: `
+      <span class="step-label">Étape 1 — Conventions</span><br>
+      Axe optique orienté dans le sens de propagation (de gauche à droite). Objet réel devant la lentille : <span class="formula">OA = −40 cm</span>. Lentille convergente : <span class="formula">f' = +15 cm</span>.
+      <span class="step-label">Étape 2 — Formule de conjugaison</span><br>
+      <span class="formula">1/OA' − 1/OA = 1/f'</span><br>
+      <span class="formula">1/OA' = 1/f' + 1/OA = 1/15 + 1/(−40)</span><br>
+      <span class="formula">1/OA' = 8/120 − 3/120 = 5/120 = 1/24</span><br>
+      <span class="formula">OA' = +24 cm</span>
+      <span class="step-label">Étape 3 — Nature de l'image</span><br>
+      <span class="formula">OA' > 0</span> : l'image est <strong>réelle</strong>, située à 24 cm <em>derrière</em> la lentille (côté image). Elle peut être recueillie sur un écran.
+      <span class="step-label">Étape 4 — Grandissement (bonus)</span><br>
+      <span class="formula">γ = OA'/OA = 24/(−40) = −0,6</span><br>
+      Image inversée (γ < 0), réduite (|γ| < 1). Taille : <span class="formula">A'B' = γ × AB = −0,6 cm</span>.
+    `,
+    schema: `
+      <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tracé de rayons à travers une lentille convergente">
+        <!-- Axe optique -->
+        <line x1="10" y1="100" x2="310" y2="100" stroke="#1a2540" stroke-width="1"/>
+        <!-- Lentille -->
+        <line x1="160" y1="40" x2="160" y2="160" stroke="#1a2540" stroke-width="1.5"/>
+        <polygon points="160,40 156,46 164,46" fill="#1a2540"/>
+        <polygon points="160,160 156,154 164,154" fill="#1a2540"/>
+        <!-- Centre optique O -->
+        <circle cx="160" cy="100" r="2" fill="#1a2540"/>
+        <text x="163" y="115" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#1a2540">O</text>
+        <!-- Foyers F et F' -->
+        <line x1="115" y1="98" x2="115" y2="102" stroke="#1a2540"/>
+        <line x1="205" y1="98" x2="205" y2="102" stroke="#1a2540"/>
+        <text x="111" y="115" font-family="Fraunces,serif" font-size="10" font-style="italic" fill="#1a2540">F</text>
+        <text x="208" y="115" font-family="Fraunces,serif" font-size="10" font-style="italic" fill="#1a2540">F'</text>
+        <!-- Objet AB -->
+        <line x1="40" y1="100" x2="40" y2="60" stroke="#d94f37" stroke-width="2.5"/>
+        <polygon points="40,60 36,66 44,66" fill="#d94f37"/>
+        <text x="30" y="55" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#d94f37">B</text>
+        <text x="30" y="115" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#d94f37">A</text>
+        <!-- Image A'B' -->
+        <line x1="232" y1="100" x2="232" y2="124" stroke="#2f6b3f" stroke-width="2.5"/>
+        <polygon points="232,124 228,118 236,118" fill="#2f6b3f"/>
+        <text x="237" y="128" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#2f6b3f">B'</text>
+        <text x="237" y="95" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#2f6b3f">A'</text>
+        <!-- Rayons : 1) parallèle à l'axe -> passe par F' -->
+        <line x1="40" y1="60" x2="160" y2="60" stroke="#1a2540" stroke-width="0.8"/>
+        <line x1="160" y1="60" x2="280" y2="135" stroke="#1a2540" stroke-width="0.8"/>
+        <!-- 2) passant par O : direction inchangée -->
+        <line x1="40" y1="60" x2="280" y2="140" stroke="#1a2540" stroke-width="0.8"/>
+        <!-- 3) passant par F : ressort parallèle à l'axe -->
+        <line x1="40" y1="60" x2="160" y2="124" stroke="#1a2540" stroke-width="0.8"/>
+        <line x1="160" y1="124" x2="280" y2="124" stroke="#1a2540" stroke-width="0.8"/>
+      </svg>
+    ` },
+
+  // ===== PROBLÈME 2 : Réfraction et angle d'incidence =====
+  { type: 'open', chapitre: 'Réfraction · Snell',
+    question: 'Un rayon arrive dans l\'air (n₁ = 1) sur un dioptre plan eau (n₂ = 1,33) sous un angle d\'incidence <span class="math">i₁ = 30°</span>. <strong>Calculer l\'angle de réfraction i₂</strong> (en degrés, à 0,1° près).',
+    correct: ['22.1', '22,1', '22.0', '22,0'],
+    tolerance: 0.2,
+    placeholder: 'i₂ en degrés…',
+    solution: `
+      <span class="step-label">Étape 1 — Loi de Snell-Descartes</span><br>
+      <span class="formula">n₁ sin(i₁) = n₂ sin(i₂)</span>
+      <span class="step-label">Étape 2 — Isoler sin(i₂)</span><br>
+      <span class="formula">sin(i₂) = (n₁/n₂) × sin(i₁) = (1/1,33) × sin(30°) = (1/1,33) × 0,5</span><br>
+      <span class="formula">sin(i₂) ≈ 0,376</span>
+      <span class="step-label">Étape 3 — Application numérique</span><br>
+      <span class="formula">i₂ = arcsin(0,376) ≈ 22,1°</span>
+      <span class="step-label">Interprétation</span><br>
+      <span class="formula">i₂ < i₁</span> : le rayon se rapproche de la normale en entrant dans le milieu plus réfringent (n₂ > n₁). C'est le principe du "bâton brisé" plongé dans l'eau.<br>
+      <em>Réflexion totale possible ?</em> Seulement dans le sens inverse (de l'eau vers l'air) : <span class="formula">i_lim = arcsin(1/1,33) ≈ 48,8°</span>.
+    `,
+    schema: `
+      <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Réfraction air-eau">
+        <!-- Dioptre -->
+        <line x1="20" y1="100" x2="260" y2="100" stroke="#1a2540" stroke-width="1.5"/>
+        <text x="265" y="90" font-family="Inter,sans-serif" font-size="9" fill="#3c4663">air (n₁=1)</text>
+        <text x="265" y="115" font-family="Inter,sans-serif" font-size="9" fill="#3c4663">eau (n₂=1,33)</text>
+        <!-- Normale -->
+        <line x1="140" y1="20" x2="140" y2="180" stroke="#1a2540" stroke-width="0.6" stroke-dasharray="3,3"/>
+        <text x="143" y="30" font-family="Inter,sans-serif" font-size="9" fill="#3c4663">N</text>
+        <!-- Rayon incident -->
+        <line x1="65" y1="35" x2="140" y2="100" stroke="#d94f37" stroke-width="1.8"/>
+        <polygon points="140,100 130,93 134,99" fill="#d94f37"/>
+        <text x="50" y="30" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#d94f37">i₁ = 30°</text>
+        <!-- Arc i₁ -->
+        <path d="M 130 70 A 25 25 0 0 0 140 75" stroke="#3c4663" stroke-width="0.8" fill="none"/>
+        <!-- Rayon réfracté -->
+        <line x1="140" y1="100" x2="195" y2="170" stroke="#2f6b3f" stroke-width="1.8"/>
+        <polygon points="195,170 185,168 192,162" fill="#2f6b3f"/>
+        <text x="195" y="155" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#2f6b3f">i₂ ≈ 22°</text>
+        <!-- Arc i₂ -->
+        <path d="M 140 130 A 25 25 0 0 0 153 127" stroke="#3c4663" stroke-width="0.8" fill="none"/>
+      </svg>
+    ` },
+
+  // ===== PROBLÈME 3 : Lentille divergente =====
+  { type: 'open', chapitre: 'Lentille divergente',
+    question: 'Lentille DIVERGENTE de <span class="math">f\' = -20 cm</span>. Objet réel à <span class="math">OA = -30 cm</span>. <strong>Donner OA\'</strong> (en cm, signe inclus, à 0,1 près).',
+    correct: ['-12', '−12', '-12.0', '−12.0'],
+    tolerance: 0.1,
+    placeholder: 'OA\' en cm (signe inclus)…',
+    solution: `
+      <span class="step-label">Étape 1 — Conventions</span><br>
+      <span class="formula">f' = −20 cm</span> (divergente : focale image négative). <span class="formula">OA = −30 cm</span> (objet réel).
+      <span class="step-label">Étape 2 — Conjugaison</span><br>
+      <span class="formula">1/OA' = 1/f' + 1/OA = 1/(−20) + 1/(−30)</span><br>
+      <span class="formula">1/OA' = −3/60 − 2/60 = −5/60 = −1/12</span><br>
+      <span class="formula">OA' = −12 cm</span>
+      <span class="step-label">Étape 3 — Nature de l'image</span><br>
+      <span class="formula">OA' < 0</span> : l'image est <strong>virtuelle</strong>, située à 12 cm devant la lentille (du même côté que l'objet). Elle ne peut pas être recueillie sur un écran mais peut être <em>vue</em> à travers la lentille.<br>
+      <span class="step-label">Grandissement</span><br>
+      <span class="formula">γ = OA'/OA = (−12)/(−30) = 0,4 > 0</span><br>
+      Image <strong>droite</strong> (γ > 0) et <strong>réduite</strong> (|γ| < 1). Caractéristique d'une lentille divergente avec objet réel : image toujours virtuelle, droite, réduite, entre F' et O.
+    `,
+    schema: `
+      <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Image virtuelle par lentille divergente">
+        <line x1="10" y1="100" x2="310" y2="100" stroke="#1a2540" stroke-width="1"/>
+        <!-- Lentille divergente -->
+        <line x1="190" y1="40" x2="190" y2="160" stroke="#1a2540" stroke-width="1.5"/>
+        <polygon points="190,40 186,34 194,34" fill="#1a2540"/>
+        <polygon points="190,160 186,166 194,166" fill="#1a2540"/>
+        <circle cx="190" cy="100" r="2" fill="#1a2540"/>
+        <text x="193" y="115" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#1a2540">O</text>
+        <!-- Foyers : F' à gauche (divergente), F à droite -->
+        <line x1="155" y1="98" x2="155" y2="102" stroke="#1a2540"/>
+        <text x="148" y="115" font-family="Fraunces,serif" font-size="10" font-style="italic" fill="#1a2540">F'</text>
+        <line x1="225" y1="98" x2="225" y2="102" stroke="#1a2540"/>
+        <text x="228" y="115" font-family="Fraunces,serif" font-size="10" font-style="italic" fill="#1a2540">F</text>
+        <!-- Objet -->
+        <line x1="60" y1="100" x2="60" y2="60" stroke="#d94f37" stroke-width="2.5"/>
+        <polygon points="60,60 56,66 64,66" fill="#d94f37"/>
+        <text x="50" y="55" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#d94f37">B</text>
+        <text x="50" y="115" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#d94f37">A</text>
+        <!-- Image virtuelle (en pointillés) -->
+        <line x1="138" y1="100" x2="138" y2="84" stroke="#2f6b3f" stroke-width="2" stroke-dasharray="3,2"/>
+        <polygon points="138,84 134,89 142,89" fill="#2f6b3f"/>
+        <text x="124" y="80" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#2f6b3f">B'</text>
+        <text x="124" y="115" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#2f6b3f">A'</text>
+        <!-- Rayons : parallèle à l'axe -> ressort comme s'il venait de F' -->
+        <line x1="60" y1="60" x2="190" y2="60" stroke="#1a2540" stroke-width="0.8"/>
+        <line x1="190" y1="60" x2="280" y2="130" stroke="#1a2540" stroke-width="0.8"/>
+        <line x1="190" y1="60" x2="138" y2="84" stroke="#1a2540" stroke-width="0.6" stroke-dasharray="2,2"/>
+        <!-- Rayon par O -->
+        <line x1="60" y1="60" x2="280" y2="155" stroke="#1a2540" stroke-width="0.8"/>
+        <text x="200" y="20" font-family="Fraunces,serif" font-size="10" font-style="italic" fill="#3c4663">image virtuelle (---)</text>
+      </svg>
+    ` },
+
+  // ===== PROBLÈME 4 : Fentes d'Young avec lame transparente =====
+  { type: 'open', chapitre: 'Young · Lame mince',
+    question: 'Dans une expérience de Young, on place une lame transparente d\'indice <span class="math">n = 1,5</span> et d\'épaisseur <span class="math">e = 10 μm</span> devant l\'UNE des deux fentes. <strong>De combien augmente la différence de marche due à la lame ?</strong> (en μm, à 0,1 près)',
+    correct: ['5', '5.0', '5,0'],
+    tolerance: 0.1,
+    placeholder: 'Δ(δ) en μm…',
+    solution: `
+      <span class="step-label">Étape 1 — Chemin optique</span><br>
+      La grandeur pertinente en optique ondulatoire est le <em>chemin optique</em> : <span class="formula">L = n × ℓ</span> (et non la distance géométrique ℓ).
+      <span class="step-label">Étape 2 — Effet de la lame</span><br>
+      Sans lame : le rayon traverse l'air sur la longueur <span class="formula">e</span>, contribuant à <span class="formula">L<sub>air</sub> = 1 × e</span>.<br>
+      Avec lame : il traverse la lame sur la longueur <span class="formula">e</span> (au lieu de l'air), contribuant à <span class="formula">L<sub>lame</sub> = n × e</span>.<br>
+      Variation : <span class="formula">ΔL = (n − 1) × e</span>
+      <span class="step-label">Étape 3 — Application numérique</span><br>
+      <span class="formula">ΔL = (1,5 − 1) × 10 μm = 0,5 × 10 μm = 5 μm</span>
+      <span class="step-label">Conséquence sur la figure</span><br>
+      Le système de franges se <strong>décale</strong> globalement vers la fente couverte par la lame. Le nombre de franges décalées est <span class="formula">N = ΔL/λ</span>. Avec <span class="formula">λ = 500 nm</span> : <span class="formula">N = 5000/0,5 = 10</span> franges. C'est la base de la mesure interférométrique d'indices.
+    `,
+    schema: null },
+
+  // ===== PROBLÈME 5 : Miroir sphérique concave =====
+  { type: 'open', chapitre: 'Miroir sphérique',
+    question: 'Un miroir sphérique concave de rayon <span class="math">R = 20 cm</span>. <strong>Donner sa distance focale f\'</strong> (en cm, signe inclus).',
+    correct: ['-10', '−10'],
+    tolerance: 0.1,
+    placeholder: 'En cm (signe inclus)…',
+    solution: `
+      <span class="step-label">Étape 1 — Convention pour les miroirs</span><br>
+      Pour un miroir, l'axe est orienté <strong>du côté de la lumière incidente</strong>. Le miroir réfléchit donc la lumière vers les <em>x négatifs</em>. Centre de courbure C : du côté réflecteur.
+      <span class="step-label">Étape 2 — Miroir concave</span><br>
+      <em>Concave</em> = creux vers la lumière incidente, donc C est devant le miroir, du côté de la lumière. Avec la convention : <span class="formula">SC < 0</span>. Ici <span class="formula">SC = −R = −20 cm</span> (R = rayon en valeur absolue).
+      <span class="step-label">Étape 3 — Formule</span><br>
+      Pour tout miroir sphérique : <span class="formula">f = f' = SC/2</span><br>
+      <span class="formula">f' = (−20)/2 = −10 cm</span>
+      <span class="step-label">Propriétés du miroir concave</span><br>
+      <span class="formula">f' < 0</span> : le miroir concave est <strong>convergent</strong> (analogue à une lentille convergente). Le foyer F = F' est unique, au milieu de SC, du côté de l'objet. Un objet à l'infini donne une image au foyer (utilisé dans les télescopes).
+      <span class="step-label">À retenir</span><br>
+      Miroir concave : <span class="formula">f' = −R/2 < 0</span> (convergent). Miroir convexe : <span class="formula">f' = +R/2 > 0</span> (divergent). Le piège : "concave" et "f' < 0" peuvent surprendre.
+    `,
+    schema: `
+      <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Miroir concave et foyer">
+        <line x1="10" y1="100" x2="310" y2="100" stroke="#1a2540" stroke-width="1"/>
+        <!-- Miroir concave (arc) -->
+        <path d="M 240 30 Q 200 100 240 170" stroke="#1a2540" stroke-width="2" fill="none"/>
+        <!-- Hachures côté non réfléchissant -->
+        <line x1="240" y1="40" x2="250" y2="35" stroke="#1a2540" stroke-width="0.6"/>
+        <line x1="240" y1="70" x2="250" y2="65" stroke="#1a2540" stroke-width="0.6"/>
+        <line x1="240" y1="100" x2="250" y2="95" stroke="#1a2540" stroke-width="0.6"/>
+        <line x1="240" y1="130" x2="250" y2="125" stroke="#1a2540" stroke-width="0.6"/>
+        <line x1="240" y1="160" x2="250" y2="155" stroke="#1a2540" stroke-width="0.6"/>
+        <!-- Sommet S -->
+        <circle cx="217" cy="100" r="2" fill="#1a2540"/>
+        <text x="218" y="92" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#1a2540">S</text>
+        <!-- Centre C -->
+        <circle cx="117" cy="100" r="2" fill="#1a2540"/>
+        <text x="115" y="92" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#1a2540">C</text>
+        <!-- Foyer F=F' au milieu -->
+        <circle cx="167" cy="100" r="2.5" fill="#d94f37"/>
+        <text x="160" y="92" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#d94f37">F=F'</text>
+        <!-- Lumière incidente -->
+        <text x="40" y="40" font-family="Inter,sans-serif" font-size="9" fill="#3c4663">lumière incidente →</text>
+        <line x1="40" y1="50" x2="60" y2="50" stroke="#3c4663" stroke-width="0.8"/>
+        <polygon points="60,50 56,48 56,52" fill="#3c4663"/>
+        <!-- Annotations distances -->
+        <line x1="117" y1="115" x2="217" y2="115" stroke="#3c4663" stroke-width="0.4"/>
+        <text x="155" y="128" font-family="Fraunces,serif" font-size="10" font-style="italic" fill="#3c4663">R = 20 cm</text>
+      </svg>
+    ` },
+
+  // ===== PROBLÈME 6 : Doublet de lentilles =====
+  { type: 'open', chapitre: 'Systèmes optiques',
+    question: 'Deux lentilles : L₁ (<span class="math">f₁\' = 10 cm</span>) puis L₂ (<span class="math">f₂\' = 20 cm</span>), distantes de <span class="math">d = O₁O₂ = 25 cm</span>. Un objet est à l\'infini. <strong>Donner la position O₂A\' de l\'image finale</strong> par L₂ (en cm, à 0,1 près).',
+    correct: ['-60', '−60'],
+    tolerance: 0.2,
+    placeholder: 'O₂A\' en cm…',
+    solution: `
+      <span class="step-label">Étape 1 — Image intermédiaire A₁ par L₁</span><br>
+      Objet à l'infini sur l'axe → image au foyer image F₁' de L₁ :<br>
+      <span class="formula">O₁A₁ = f₁' = +10 cm</span>
+      <span class="step-label">Étape 2 — Cette image devient l'objet pour L₂</span><br>
+      Position de A₁ par rapport à O₂ :<br>
+      <span class="formula">O₂A₁ = O₂O₁ + O₁A₁ = −25 + 10 = −15 cm</span><br>
+      A₁ est un objet réel pour L₂ (situé à 15 cm devant L₂).
+      <span class="step-label">Étape 3 — Image finale A' par L₂</span><br>
+      Formule de conjugaison pour L₂ :<br>
+      <span class="formula">1/O₂A' − 1/O₂A₁ = 1/f₂'</span><br>
+      <span class="formula">1/O₂A' = 1/f₂' + 1/O₂A₁ = 1/20 + 1/(−15)</span><br>
+      <span class="formula">1/O₂A' = 3/60 − 4/60 = −1/60</span><br>
+      <span class="formula">O₂A' = −60 cm</span>
+      <span class="step-label">Nature de l'image</span><br>
+      <span class="formula">O₂A' < 0</span> : l'image finale est <strong>virtuelle</strong>, à 60 cm devant L₂. Elle peut être visualisée à l'œil à travers L₂, mais pas projetée sur écran.<br>
+      <em>Pourquoi virtuelle ?</em> Parce que A₁ est entre F₂ et O₂ (|O₂A₁| = 15 < f₂' = 20). Dans cette configuration, une lentille convergente donne toujours une image virtuelle agrandie (cas de la loupe).
+      <span class="step-label">Grandissement total</span><br>
+      <span class="formula">γ₂ = O₂A'/O₂A₁ = (−60)/(−15) = +4</span> : image droite (par rapport à A₁) et agrandie 4×.
+    `,
+    schema: null },
+
+  // ===== PROBLÈME 7 : Brouillage des franges en lumière blanche =====
+  { type: 'open', chapitre: 'Young · Lumière blanche',
+    question: 'Dans une expérience de Young en lumière blanche, on observe la frange centrale (k = 0) <strong>blanche</strong>, puis quelques franges colorées, puis un brouillage. <strong>Pourquoi y a-t-il brouillage loin de la frange centrale ?</strong> (mot-clé attendu : "superposition", "recouvrement" ou similaire)',
+    correct: ['superposition', 'recouvrement', 'chevauchement', 'mélange', 'melange'],
+    placeholder: 'Mot-clé physique…',
+    solution: `
+      <span class="step-label">Étape 1 — Frange centrale (k = 0)</span><br>
+      Au centre : <span class="formula">δ = 0</span> pour TOUTES les longueurs d'onde. Toutes les couleurs y interfèrent en phase → frange blanche.
+      <span class="step-label">Étape 2 — Franges colorées proches</span><br>
+      Pour <span class="formula">k = ±1</span>, la position dépend de λ : <span class="formula">x = kλD/a</span>. Donc le rouge (λ grand) est plus loin du centre que le bleu (λ petit). On voit un arc-en-ciel de chaque côté.
+      <span class="step-label">Étape 3 — Brouillage : superposition de systèmes</span><br>
+      Plus on s'éloigne du centre, plus l'ordre k augmente. La frange brillante d'ordre <span class="formula">k</span> pour λ₁ se retrouve à la même position que celle d'ordre <span class="formula">k'</span> pour λ₂ (différent). Les franges des différentes longueurs d'onde se <strong>superposent / se recouvrent</strong>.
+      <span class="step-label">Conséquence quantitative</span><br>
+      Le brouillage commence quand : <span class="formula">i(rouge) − i(bleu) ~ i</span>, soit pour <span class="formula">k(λ_max − λ_min)/λ_moy ~ 1</span>, d'où <span class="formula">k ~ λ_moy/Δλ</span>. Avec Δλ = 300 nm et λ_moy = 550 nm : on perd le contraste vers <span class="formula">k ~ 2</span> ou 3. C'est observable expérimentalement.
+    `,
+    schema: null },
+
+  // ===== PROBLÈME 8 : Vergence d'un système accolé =====
+  { type: 'open', chapitre: 'Système optique',
+    question: 'Un système afocal est constitué de deux lentilles de focales <span class="math">f₁\' = +10 cm</span> et <span class="math">f₂\' = +5 cm</span> séparées d\'une distance <span class="math">d = ?</span>. <strong>Donner la distance d entre les centres optiques</strong> (en cm).',
+    correct: ['15'],
+    tolerance: 0.1,
+    placeholder: 'En cm…',
+    solution: `
+      <span class="step-label">Étape 1 — Définition d'un système afocal</span><br>
+      Système <strong>afocal</strong> : transforme un faisceau parallèle (objet à l'infini) en un faisceau parallèle (image à l'infini). Pas de point focal global.
+      <span class="step-label">Étape 2 — Condition géométrique</span><br>
+      Pour cela, l'image intermédiaire (formée par L₁) doit servir d'objet à l'infini pour L₂. Donc l'image par L₁ doit se former au foyer objet F₂ de L₂.
+      <span class="step-label">Étape 3 — Position de F₁' et F₂</span><br>
+      Pour objet à l'∞, L₁ forme l'image en F₁', avec <span class="formula">O₁F₁' = f₁' = 10 cm</span>.<br>
+      Pour que cette image soit en F₂ de L₂ : <span class="formula">F₂O₂ = f₂' = 5 cm</span>, donc F₂ est à 5 cm <em>devant</em> O₂ : <span class="formula">O₂F₂ = −5 cm</span>.
+      <span class="step-label">Étape 4 — Distance d</span><br>
+      <span class="formula">d = O₁O₂ = O₁F₁' + F₁'F₂ + F₂O₂</span><br>
+      Si F₁' coïncide avec F₂ (condition afocale) : <span class="formula">F₁'F₂ = 0</span>.<br>
+      <span class="formula">d = f₁' + 0 + f₂' = 10 + 5 = 15 cm</span>
+      <span class="step-label">Grossissement (bonus)</span><br>
+      Le grossissement angulaire vaut <span class="formula">G = −f₁'/f₂' = −10/5 = −2</span>. C'est le principe de la <strong>lunette astronomique</strong> (Kepler) : f₁' = objectif (long), f₂' = oculaire (court).
+    `,
+    schema: `
+      <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Système afocal">
+        <line x1="10" y1="100" x2="310" y2="100" stroke="#1a2540" stroke-width="1"/>
+        <!-- Lentille 1 -->
+        <line x1="100" y1="50" x2="100" y2="150" stroke="#1a2540" stroke-width="1.5"/>
+        <polygon points="100,50 96,56 104,56" fill="#1a2540"/>
+        <polygon points="100,150 96,144 104,144" fill="#1a2540"/>
+        <text x="103" y="120" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#1a2540">O₁</text>
+        <!-- Lentille 2 -->
+        <line x1="220" y1="60" x2="220" y2="140" stroke="#1a2540" stroke-width="1.5"/>
+        <polygon points="220,60 216,66 224,66" fill="#1a2540"/>
+        <polygon points="220,140 216,134 224,134" fill="#1a2540"/>
+        <text x="223" y="120" font-family="Fraunces,serif" font-size="11" font-style="italic" fill="#1a2540">O₂</text>
+        <!-- Foyer commun F₁' = F₂ -->
+        <circle cx="190" cy="100" r="3" fill="#d94f37"/>
+        <text x="175" y="92" font-family="Fraunces,serif" font-size="10" font-style="italic" fill="#d94f37">F₁'=F₂</text>
+        <!-- Rayons parallèles à gauche -->
+        <line x1="20" y1="80" x2="100" y2="80" stroke="#3c4663" stroke-width="0.7"/>
+        <line x1="20" y1="100" x2="100" y2="100" stroke="#3c4663" stroke-width="0.7"/>
+        <line x1="20" y1="120" x2="100" y2="120" stroke="#3c4663" stroke-width="0.7"/>
+        <!-- Convergent vers F -->
+        <line x1="100" y1="80" x2="190" y2="100" stroke="#3c4663" stroke-width="0.7"/>
+        <line x1="100" y1="120" x2="190" y2="100" stroke="#3c4663" stroke-width="0.7"/>
+        <!-- Divergent depuis F -->
+        <line x1="190" y1="100" x2="220" y2="86" stroke="#3c4663" stroke-width="0.7"/>
+        <line x1="190" y1="100" x2="220" y2="114" stroke="#3c4663" stroke-width="0.7"/>
+        <!-- Sortie parallèle -->
+        <line x1="220" y1="86" x2="305" y2="86" stroke="#2f6b3f" stroke-width="0.8"/>
+        <line x1="220" y1="100" x2="305" y2="100" stroke="#2f6b3f" stroke-width="0.8"/>
+        <line x1="220" y1="114" x2="305" y2="114" stroke="#2f6b3f" stroke-width="0.8"/>
+        <text x="115" y="40" font-family="Fraunces,serif" font-size="10" font-style="italic" fill="#3c4663">d = f₁'+f₂' = 15 cm</text>
+      </svg>
+    ` },
+
+  // ===== PROBLÈME 9 : Mesure de longueur d'onde par interférences =====
+  { type: 'open', chapitre: 'Young · Mesure de λ',
+    question: 'On utilise un dispositif de Young pour mesurer λ. <span class="math">a = 0,30 mm</span>, <span class="math">D = 1,5 m</span>. On compte <strong>11 franges brillantes</strong> sur une distance de <span class="math">25 mm</span>. <strong>En déduire λ</strong> (en nm, à 5 nm près).',
+    correct: ['500'],
+    tolerance: 0.02,
+    placeholder: 'λ en nm…',
+    solution: `
+      <span class="step-label">Étape 1 — Interfrange à partir du comptage</span><br>
+      <strong>Piège classique :</strong> entre 11 franges brillantes, il y a <strong>10 interfranges</strong>, pas 11 !<br>
+      <span class="formula">i = 25 mm / 10 = 2,5 mm</span>
+      <span class="step-label">Étape 2 — Formule de l'interfrange</span><br>
+      <span class="formula">i = λD/a</span>, donc <span class="formula">λ = ia/D</span>
+      <span class="step-label">Étape 3 — Application numérique</span><br>
+      <span class="formula">λ = (2,5×10⁻³ × 0,30×10⁻³) / 1,5</span><br>
+      <span class="formula">λ = (7,5×10⁻⁷) / 1,5 = 5×10⁻⁷ m = 500 nm</span>
+      <span class="step-label">Conclusion</span><br>
+      <span class="formula">λ = 500 nm</span>, dans le vert. C'est typiquement la longueur d'onde dominante d'une lampe à vapeur de mercure (raie verte à 546 nm) ou la médiane du spectre visible.<br>
+      <em>Précision :</em> avec 10 interfranges au lieu d'un seul, on multiplie la précision par 10. C'est pourquoi on mesure toujours plusieurs interfranges.
+    `,
+    schema: null },
+
+  // ===== PROBLÈME 10 : Longueur de cohérence =====
+  { type: 'open', chapitre: 'Cohérence temporelle',
+    question: 'Une source quasi-monochromatique émet à <span class="math">λ₀ = 600 nm</span> avec une largeur spectrale <span class="math">Δλ = 0,01 nm</span>. <strong>Donner sa longueur de cohérence ℓ<sub>c</sub></strong> (en cm, à 0,1 près).',
+    correct: ['3.6', '3,6', '3.60', '3,60'],
+    tolerance: 0.1,
+    placeholder: 'En cm…',
+    solution: `
+      <span class="step-label">Étape 1 — Définition</span><br>
+      La <strong>longueur de cohérence</strong> ℓ_c est la différence de marche maximale au-delà de laquelle les interférences disparaissent (brouillage total). Elle est liée à la largeur spectrale Δλ par :<br>
+      <span class="formula">ℓ<sub>c</sub> = λ₀² / Δλ</span>
+      <span class="step-label">Étape 2 — Origine physique</span><br>
+      Une raie n'est jamais parfaitement monochromatique : elle est la superposition d'ondes de longueurs d'onde proches. Chaque composante donne son propre système de franges, légèrement décalé. Au-delà de ℓ_c, ces systèmes deviennent en opposition de phase → brouillage.
+      <span class="step-label">Étape 3 — Application numérique</span><br>
+      <span class="formula">ℓ<sub>c</sub> = (600×10⁻⁹)² / (0,01×10⁻⁹)</span><br>
+      <span class="formula">ℓ<sub>c</sub> = 3,6×10⁻¹³ / 10⁻¹¹ = 3,6×10⁻² m = 3,6 cm</span>
+      <span class="step-label">Ordres de grandeur</span><br>
+      • Lampe à incandescence (lumière blanche, Δλ ~ 300 nm) : <span class="formula">ℓ<sub>c</sub> ~ 1 μm</span> (très court)<br>
+      • Lampe spectrale (Δλ ~ 0,01 nm) : <span class="formula">ℓ<sub>c</sub> ~ qq cm</span><br>
+      • Laser He-Ne (Δλ ~ 10⁻⁶ nm) : <span class="formula">ℓ<sub>c</sub> ~ 100 m</span> ou plus<br>
+      C'est ce qui explique pourquoi les interféromètres à grande différence de marche nécessitent un laser.
+    `,
+    schema: null }
+];
+
+// ============================================================
+//  ÉTAT DE L'APPLICATION
+// ============================================================
+const state = {
+  currentIndex: 0,
+  answers: new Array(QUESTIONS.length).fill(null),
+  timeLeft: 2700, // 45 min
+  timerInterval: null,
+  paused: false,
+  bonusPaused: false,
+  startedAt: null,
+  finishedAt: null,
+  studentName: "",
+  // Niveau bonus
+  bonusIndex: 0,
+  bonusAnswers: new Array(BONUS_QUESTIONS.length).fill(null),
+  bonusCompleted: false,
+  bonusTimeLeft: 5400, // 1h30 = 5400s
+  bonusTimerInterval: null
+};
+
+const LEVEL1_DURATION = 2700; // 45 min en secondes
+const BONUS_DURATION = 5400; // 1h30 en secondes
+
+// ============================================================
+//  ÉLÉMENTS DOM
+// ============================================================
+const screens = {
+  intro: document.getElementById('screen-intro'),
+  quiz: document.getElementById('screen-quiz'),
+  bonusIntro: document.getElementById('screen-bonus-intro'),
+  bonus: document.getElementById('screen-bonus'),
+  results: document.getElementById('screen-results')
+};
+
+const els = {
+  startBtn: document.getElementById('btn-start'),
+  nextBtn: document.getElementById('btn-next'),
+  prevBtn: document.getElementById('btn-prev'),
+  restartBtn: document.getElementById('btn-restart'),
+  questionContainer: document.getElementById('question-container'),
+  timer: document.getElementById('timer'),
+  progressText: document.getElementById('progress-text'),
+  progressPercent: document.getElementById('progress-percent'),
+  progressFill: document.getElementById('progress-fill'),
+  nameInput: document.getElementById('student-name'),
+  nameError: document.getElementById('name-error'),
+  finalScore: document.getElementById('final-score'),
+  verdict: document.getElementById('verdict'),
+  statCorrect: document.getElementById('stat-correct'),
+  statWrong: document.getElementById('stat-wrong'),
+  statSkipped: document.getElementById('stat-skipped'),
+  statTime: document.getElementById('stat-time'),
+  reviewList: document.getElementById('review-list'),
+  // Bonus
+  bonusTimer: document.getElementById('bonus-timer'),
+  bonusContainer: document.getElementById('bonus-question-container'),
+  bonusNextBtn: document.getElementById('btn-bonus-next'),
+  bonusPrevBtn: document.getElementById('btn-bonus-prev'),
+  bonusProgressText: document.getElementById('bonus-progress-text'),
+  bonusProgressPercent: document.getElementById('bonus-progress-percent'),
+  bonusProgressFill: document.getElementById('bonus-progress-fill'),
+  bonusCtaWrapper: document.getElementById('bonus-cta-wrapper'),
+  bonusResultsWrapper: document.getElementById('bonus-results-wrapper'),
+  // Intro bonus
+  startBonusConfirmBtn: document.getElementById('btn-start-bonus-confirm'),
+  backResultsBtn: document.getElementById('btn-back-results'),
+  // Download
+  downloadBtn: document.getElementById('btn-download-pdf'),
+  // Pause
+  pauseBtn: document.getElementById('btn-pause'),
+  resumeBtn: document.getElementById('btn-resume'),
+  pauseOverlay: document.getElementById('pause-overlay'),
+  bonusPauseBtn: document.getElementById('btn-bonus-pause'),
+  bonusResumeBtn: document.getElementById('btn-bonus-resume'),
+  bonusPauseOverlay: document.getElementById('bonus-pause-overlay')
+};
+
+// ============================================================
+//  NAVIGATION D'ÉCRANS
+// ============================================================
+function showScreen(name) {
+  Object.values(screens).forEach(s => s.classList.add('hidden'));
+  screens[name].classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+// ============================================================
+//  RENDU D'UNE QUESTION
+// ============================================================
+// ============================================================
+//  HELPERS DE VALIDATION (questions ouvertes)
+// ============================================================
+function normalizeAnswer(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .toLowerCase()
+    .replace(/\s+/g, '')        // supprime tous les espaces
+    .replace(/,/g, '.')           // virgule -> point
+    .replace(/[−–—]/g, '-')  // moins typographiques -> -
+    .replace(/[∞]/g, 'infini')         // ∞ -> infini
+    .replace(/plusinfini/g, '+infini')
+    .replace(/moinsinfini/g, '-infini')
+    .replace(/^plus/g, '+')
+    .replace(/^moins/g, '-')
+    .replace(/\*\*/g, '^');     // ** -> ^
+}
+
+function tryParseNumber(s) {
+  // Convertit "1/2", "0.5", "-3" en nombre. Retourne null si impossible.
+  const norm = normalizeAnswer(s);
+  if (norm === '') return null;
+  // Fraction ?
+  const frac = norm.match(/^(-?)([0-9]+)\/([0-9]+)$/);
+  if (frac) {
+    const sign = frac[1] === '-' ? -1 : 1;
+    const num = parseInt(frac[2], 10);
+    const den = parseInt(frac[3], 10);
+    if (den === 0) return null;
+    return sign * num / den;
+  }
+  // Nombre décimal
+  const n = parseFloat(norm);
+  return isNaN(n) ? null : n;
+}
+
+function checkAnswer(question, userAnswer) {
+  // Pour QCM : userAnswer est l'index choisi
+  if (question.type === 'qcm') {
+    return userAnswer === question.correct;
+  }
+  // Pour question ouverte
+  if (userAnswer === null || userAnswer === undefined || String(userAnswer).trim() === '') {
+    return false;
+  }
+  const corrects = Array.isArray(question.correct) ? question.correct : [question.correct];
+  const userNorm = normalizeAnswer(userAnswer);
+
+  for (const c of corrects) {
+    const cNorm = normalizeAnswer(c);
+    // Match exact texte (insensible casse, espaces, virgule/point)
+    if (userNorm === cNorm) return true;
+    // Match numérique avec tolérance
+    const userNum = tryParseNumber(userAnswer);
+    const cNum = tryParseNumber(c);
+    if (userNum !== null && cNum !== null) {
+      const tol = question.tolerance || 0.001;
+      if (Math.abs(userNum - cNum) <= tol * Math.max(1, Math.abs(cNum))) return true;
+    }
+  }
+  return false;
+}
+
+// ============================================================
+//  RENDU D'UNE QUESTION (QCM ou Ouverte)
+// ============================================================
+function renderQuestion() {
+  const q = QUESTIONS[state.currentIndex];
+  const i = state.currentIndex;
+  const isQCM = q.type === 'qcm';
+
+  let answerBlockHTML;
+  if (isQCM) {
+    answerBlockHTML = `
+      <div class="options">
+        ${q.options.map((opt, idx) => `
+          <label class="option">
+            <input type="radio" name="answer" value="${idx}" ${state.answers[i] === idx ? 'checked' : ''}>
+            <span class="opt-letter">${String.fromCharCode(65 + idx)}</span>
+            <span class="opt-text">${opt}</span>
+          </label>
+        `).join('')}
+      </div>
+    `;
+  } else {
+    const currentVal = state.answers[i] !== null && state.answers[i] !== undefined ? state.answers[i] : '';
+    answerBlockHTML = `
+      <div class="open-answer-block">
+        <label for="open-input">Ta réponse</label>
+        <input type="text" id="open-input" class="open-input" placeholder="${q.placeholder || 'Saisis ta réponse…'}" value="${String(currentVal).replace(/"/g, '&quot;')}" autocomplete="off">
+        <div class="open-help">Tu peux utiliser fractions <code>2/3</code>, décimales <code>0,5</code> ou <code>0.5</code>, signes <code>+∞ / -∞</code>, écritures comme <code>ln(2)</code>, <code>e^3</code>.</div>
+      </div>
+    `;
+  }
+
+  els.questionContainer.innerHTML = `
+    <div class="question-card${isQCM ? '' : ' open-card'}">
+      <div class="level-tag">${isQCM ? 'QCM' : '✎ Réponse libre'} · ${q.chapitre}</div>
+      <div class="q-number">Question ${i + 1} sur ${QUESTIONS.length}</div>
+      <div class="q-text">${q.question}</div>
+      ${answerBlockHTML}
+    </div>
+  `;
+
+  // Listeners
+  if (isQCM) {
+    els.questionContainer.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.addEventListener('change', e => {
+        state.answers[i] = parseInt(e.target.value, 10);
+      });
+    });
+  } else {
+    const input = document.getElementById('open-input');
+    input.addEventListener('input', e => {
+      state.answers[i] = e.target.value;
+    });
+    // Touche Entrée = passer à la suivante (sauf dernière)
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        els.nextBtn.click();
+      }
+    });
+    // Auto-focus
+    setTimeout(() => input.focus(), 50);
+  }
+
+  // Progress
+  const percent = Math.round(((i + 1) / QUESTIONS.length) * 100);
+  els.progressText.textContent = `Question ${i + 1} / ${QUESTIONS.length}`;
+  els.progressPercent.textContent = `${percent}%`;
+  els.progressFill.style.width = `${percent}%`;
+
+  // Boutons
+  els.prevBtn.disabled = i === 0;
+  els.prevBtn.style.opacity = i === 0 ? '0.4' : '1';
+  els.prevBtn.style.cursor = i === 0 ? 'not-allowed' : 'pointer';
+  els.nextBtn.textContent = i === QUESTIONS.length - 1 ? 'Terminer ✓' : 'Suivant →';
+}
+
+// ============================================================
+//  TIMER
+// ============================================================
+function formatTime(s) {
+  if (s >= 3600) {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  }
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+}
+
+function startTimer() {
+  state.startedAt = Date.now();
+  updateTimerDisplay();
+  state.timerInterval = setInterval(() => {
+    state.timeLeft--;
+    updateTimerDisplay();
+    if (state.timeLeft <= 0) {
+      clearInterval(state.timerInterval);
+      finishQuiz(true);
+    }
+  }, 1000);
+}
+
+function updTimerColors() {
+  els.timer.classList.remove('warning', 'critical');
+  if (state.timeLeft <= 300) els.timer.classList.add('critical');     // < 5 min
+  else if (state.timeLeft <= 600) els.timer.classList.add('warning'); // < 10 min
+}
+
+function updateTimerDisplay() {
+  els.timer.textContent = formatTime(state.timeLeft);
+  updTimerColors();
+}
+
+// ============================================================
+//  FIN DU QUIZ & RÉSULTATS
+// ============================================================
+function isAnswered(userAns, q) {
+  if (q.type === 'qcm') return userAns !== null && userAns !== undefined;
+  return userAns !== null && userAns !== undefined && String(userAns).trim() !== '';
+}
+
+function formatUserAnswer(userAns, q) {
+  if (!isAnswered(userAns, q)) return '<em>Aucune réponse</em>';
+  if (q.type === 'qcm') {
+    return `${String.fromCharCode(65 + userAns)} — ${q.options[userAns]}`;
+  }
+  return String(userAns);
+}
+
+function formatCorrectAnswer(q) {
+  if (q.type === 'qcm') {
+    return `${String.fromCharCode(65 + q.correct)} — ${q.options[q.correct]}`;
+  }
+  const corrects = Array.isArray(q.correct) ? q.correct : [q.correct];
+  // On affiche la première forme comme "principale"
+  return corrects[0];
+}
+
+function finishQuiz(timeUp = false) {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  state.finishedAt = Date.now();
+
+  // Score
+  let correctCount = 0, wrongCount = 0, skippedCount = 0;
+  QUESTIONS.forEach((q, i) => {
+    if (!isAnswered(state.answers[i], q)) skippedCount++;
+    else if (checkAnswer(q, state.answers[i])) correctCount++;
+    else wrongCount++;
+  });
+
+  const note20 = Math.round((correctCount / QUESTIONS.length) * 20 * 10) / 10;
+  els.finalScore.textContent = note20.toString().replace('.', ',');
+
+  // Verdict
+  let verdict;
+  if (timeUp) verdict = `Temps écoulé. ${getVerdict(note20)}`;
+  else verdict = getVerdict(note20);
+  if (state.studentName) verdict = `${state.studentName}, ${verdict.charAt(0).toLowerCase() + verdict.slice(1)}`;
+  els.verdict.textContent = verdict;
+
+  // Stats
+  els.statCorrect.textContent = correctCount;
+  els.statWrong.textContent = wrongCount;
+  els.statSkipped.textContent = skippedCount;
+  const elapsedSec = LEVEL1_DURATION - state.timeLeft;
+  els.statTime.textContent = formatTime(elapsedSec);
+
+  // Compte-rendu
+  els.reviewList.innerHTML = QUESTIONS.map((q, i) => {
+    const userAns = state.answers[i];
+    const answered = isAnswered(userAns, q);
+    const correct = answered && checkAnswer(q, userAns);
+    let status, statusLabel;
+    if (!answered) { status = 'skipped'; statusLabel = 'Non répondu'; }
+    else if (correct) { status = 'correct'; statusLabel = 'Correct'; }
+    else { status = 'wrong'; statusLabel = 'Incorrect'; }
+
+    const userStr = formatUserAnswer(userAns, q);
+    const yourAnswerSpan = !answered
+      ? userStr
+      : `<span class="${correct ? 'answer-correct' : 'answer-wrong'}">${userStr}</span>`;
+    const goodAnswer = `<span class="answer-correct">${formatCorrectAnswer(q)}</span>`;
+
+    let answersHTML;
+    if (answered && !correct) {
+      answersHTML = `<div><strong>Ta réponse :</strong> ${yourAnswerSpan}</div><div><strong>Bonne réponse :</strong> ${goodAnswer}</div>`;
+    } else if (!answered) {
+      answersHTML = `<div><strong>Bonne réponse :</strong> ${goodAnswer}</div>`;
+    } else {
+      answersHTML = `<div><strong>Bonne réponse :</strong> ${goodAnswer}</div>`;
+    }
+
+    return `
+      <div class="review-item ${status}">
+        <div class="review-header">
+          <span class="q-num">Q${i + 1} · ${q.chapitre}</span>
+          <span class="status ${status}">${statusLabel}</span>
+        </div>
+        <div class="q-text">${q.question}</div>
+        <div class="review-answers">${answersHTML}</div>
+        ${q.explication ? `<div class="review-hint"><strong>Explication :</strong> ${q.explication}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  // Affiche le CTA Bonus (toujours accessible)
+  renderBonusCTA();
+  // Si le bonus a déjà été joué, on affiche aussi sa section
+  if (state.bonusCompleted) renderBonusResults();
+
+  showScreen('results');
+}
+
+// ============================================================
+//  NIVEAU BONUS — CTA & rendu
+// ============================================================
+function renderBonusCTA() {
+  // Si le bonus a déjà été joué, on masque le CTA
+  if (state.bonusCompleted) {
+    els.bonusCtaWrapper.innerHTML = '';
+    return;
+  }
+  els.bonusCtaWrapper.innerHTML = `
+    <div class="bonus-cta">
+      <div class="eyebrow">★ Niveau 2 débloqué</div>
+      <h3>Prêt(e) pour le <em>niveau supérieur</em> ?</h3>
+      <p>10 problèmes type concours (CCINP / Mines / Centrale) — RLC, fonctions de transfert, résonance, énergie, décrément logarithmique. 1h30, note /20.</p>
+      <button class="btn" id="btn-start-bonus">Lire les consignes du Niveau 2 →</button>
+    </div>
+  `;
+  document.getElementById('btn-start-bonus').addEventListener('click', () => {
+    showScreen('bonusIntro');
+  });
+}
+
+function startBonus() {
+  state.bonusIndex = 0;
+  state.bonusAnswers.fill(null);
+  state.bonusTimeLeft = BONUS_DURATION;
+  document.body.classList.add('bonus-mode');
+  showScreen('bonus');
+  renderBonusQuestion();
+  startBonusTimer();
+}
+
+function startBonusTimer() {
+  updateBonusTimerDisplay();
+  state.bonusTimerInterval = setInterval(() => {
+    state.bonusTimeLeft--;
+    updateBonusTimerDisplay();
+    if (state.bonusTimeLeft <= 0) {
+      clearInterval(state.bonusTimerInterval);
+      finishBonus(true);
+    }
+  }, 1000);
+}
+
+function updateBonusTimerDisplay() {
+  els.bonusTimer.textContent = formatTime(state.bonusTimeLeft);
+  els.bonusTimer.classList.remove('warning', 'critical');
+  if (state.bonusTimeLeft <= 300) {
+    els.bonusTimer.classList.add('critical');
+  } else if (state.bonusTimeLeft <= 900) {
+    els.bonusTimer.classList.add('warning');
+  }
+}
+
+function renderBonusQuestion() {
+  const q = BONUS_QUESTIONS[state.bonusIndex];
+  const i = state.bonusIndex;
+  const isQCM = q.type === 'qcm';
+
+  let answerBlockHTML;
+  if (isQCM) {
+    answerBlockHTML = `
+      <div class="options">
+        ${q.options.map((opt, idx) => `
+          <label class="option">
+            <input type="radio" name="bonus-answer" value="${idx}" ${state.bonusAnswers[i] === idx ? 'checked' : ''}>
+            <span class="opt-letter">${String.fromCharCode(65 + idx)}</span>
+            <span class="opt-text">${opt}</span>
+          </label>
+        `).join('')}
+      </div>
+    `;
+  } else {
+    const currentVal = state.bonusAnswers[i] !== null && state.bonusAnswers[i] !== undefined ? state.bonusAnswers[i] : '';
+    answerBlockHTML = `
+      <div class="open-answer-block">
+        <label for="bonus-open-input">Ta réponse</label>
+        <input type="text" id="bonus-open-input" class="open-input" placeholder="${q.placeholder || 'Saisis ta réponse…'}" value="${String(currentVal).replace(/"/g, '&quot;')}" autocomplete="off">
+        <div class="open-help">Fractions <code>2/3</code>, décimales <code>0,5</code>, <code>ln(...)</code>, <code>e^...</code>, <code>+∞ / -∞</code> acceptés.</div>
+      </div>
+    `;
+  }
+
+  els.bonusContainer.innerHTML = `
+    <div class="question-card bonus-card${isQCM ? '' : ' open-card'}">
+      <div class="level-tag">★ Niveau 2 · ${q.chapitre || 'Concours'}</div>
+      <div class="q-number">Problème ${i + 1} sur ${BONUS_QUESTIONS.length}</div>
+      <div class="q-text">${q.question}</div>
+      ${answerBlockHTML}
+    </div>
+  `;
+
+  if (isQCM) {
+    els.bonusContainer.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.addEventListener('change', e => {
+        state.bonusAnswers[i] = parseInt(e.target.value, 10);
+      });
+    });
+  } else {
+    const input = document.getElementById('bonus-open-input');
+    input.addEventListener('input', e => {
+      state.bonusAnswers[i] = e.target.value;
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        els.bonusNextBtn.click();
+      }
+    });
+    setTimeout(() => input.focus(), 50);
+  }
+
+  // Progress
+  const percent = Math.round(((i + 1) / BONUS_QUESTIONS.length) * 100);
+  els.bonusProgressText.textContent = `Question ${i + 1} / ${BONUS_QUESTIONS.length}`;
+  if (els.bonusProgressPercent) els.bonusProgressPercent.textContent = `${percent}%`;
+  els.bonusProgressFill.style.width = `${percent}%`;
+
+  // Boutons
+  els.bonusPrevBtn.disabled = i === 0;
+  els.bonusPrevBtn.style.opacity = i === 0 ? '0.4' : '1';
+  els.bonusPrevBtn.style.cursor = i === 0 ? 'not-allowed' : 'pointer';
+  els.bonusNextBtn.textContent = i === BONUS_QUESTIONS.length - 1 ? 'Terminer le bonus ✓' : 'Suivant →';
+}
+
+function finishBonus(timeUp = false) {
+  if (state.bonusTimerInterval) clearInterval(state.bonusTimerInterval);
+  state.bonusCompleted = true;
+  state.bonusTimeUp = timeUp;
+  document.body.classList.remove('bonus-mode');
+  renderBonusResults();
+  // On masque le CTA puisque le bonus est joué
+  els.bonusCtaWrapper.innerHTML = '';
+  showScreen('results');
+}
+
+function renderBonusResults() {
+  let correctCount = 0, wrongCount = 0, skippedCount = 0;
+  BONUS_QUESTIONS.forEach((q, i) => {
+    if (!isAnswered(state.bonusAnswers[i], q)) skippedCount++;
+    else if (checkAnswer(q, state.bonusAnswers[i])) correctCount++;
+    else wrongCount++;
+  });
+
+  // Note sur 20 : ~1,67 par bonne réponse sur 12
+  const note20 = Math.round((correctCount / BONUS_QUESTIONS.length) * 20 * 10) / 10;
+  const elapsedSec = BONUS_DURATION - state.bonusTimeLeft;
+
+  const reviewHTML = BONUS_QUESTIONS.map((q, i) => {
+    const userAns = state.bonusAnswers[i];
+    const answered = isAnswered(userAns, q);
+    const correct = answered && checkAnswer(q, userAns);
+    let status, statusLabel;
+    if (!answered) { status = 'skipped'; statusLabel = 'Non répondu'; }
+    else if (correct) { status = 'correct'; statusLabel = 'Correct'; }
+    else { status = 'wrong'; statusLabel = 'Incorrect'; }
+
+    const userStr = formatUserAnswer(userAns, q);
+    const yourAnswer = !answered
+      ? userStr
+      : `<span class="${correct ? 'answer-correct' : 'answer-wrong'}">${userStr}</span>`;
+    const goodAnswer = `<span class="answer-correct">${formatCorrectAnswer(q)}</span>`;
+
+    const schemaHTML = q.schema ? `
+      <div class="review-schema">
+        ${q.schema}
+        <div class="schema-caption">Schéma explicatif</div>
+      </div>
+    ` : '';
+
+    let answersHTML;
+    if (answered && !correct) {
+      answersHTML = `<div><strong>Ta réponse :</strong> ${yourAnswer}</div><div><strong>Bonne réponse :</strong> ${goodAnswer}</div>`;
+    } else {
+      answersHTML = `<div><strong>Bonne réponse :</strong> ${goodAnswer}</div>`;
+    }
+
+    return `
+      <div class="review-item ${status}">
+        <div class="review-header">
+          <span class="q-num">B${i + 1} · ${q.chapitre || '★ Niveau 2'}</span>
+          <span class="status ${status}">${statusLabel}</span>
+        </div>
+        <div class="q-text">${q.question}</div>
+        <div class="review-answers">${answersHTML}</div>
+        <div class="review-hint"><strong>Correction détaillée :</strong>${q.solution}</div>
+        ${schemaHTML}
+      </div>
+    `;
+  }).join('');
+
+  els.bonusResultsWrapper.innerHTML = `
+    <div class="bonus-results-section">
+      <div class="bonus-score-line">
+        <span class="label">★ Niveau 2 · Concours</span>
+        <span class="score">${note20.toString().replace('.', ',')}<span class="sep">/</span><span class="max">20</span></span>
+      </div>
+      <p class="subtitle" style="font-style: italic; color: var(--ink-soft); margin-bottom: 28px;">
+        ${state.bonusTimeUp ? 'Temps écoulé. ' : ''}${getBonusVerdict(note20, correctCount, skippedCount)}
+      </p>
+      <div class="stats-grid" style="margin-bottom: 32px;">
+        <div class="stat">
+          <div class="stat-label">Bonnes</div>
+          <div class="stat-value good">${correctCount}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Fausses</div>
+          <div class="stat-value bad">${wrongCount}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Sans rép.</div>
+          <div class="stat-value">${skippedCount}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Temps</div>
+          <div class="stat-value" style="font-size: 24px;">${formatTime(elapsedSec)}</div>
+        </div>
+      </div>
+      <h2 style="font-family: 'Fraunces', serif; font-weight: 600; font-size: 24px; margin-bottom: 8px; letter-spacing: -0.01em;">
+        Correction du Niveau 2
+      </h2>
+      <p class="subtitle">Chaque problème est expliqué étape par étape, avec schéma quand c'est utile.</p>
+      ${reviewHTML}
+    </div>
+  `;
+}
+
+function getBonusVerdict(note, correct, skipped) {
+  if (note >= 18) return "Excellent. Niveau concours solide — tu réponds à des questions type Mines/Centrale sans difficulté.";
+  if (note >= 15) return "Très bon résultat sur des problèmes type concours. Bonnes bases.";
+  if (note >= 12) return "Bon niveau, quelques notions à consolider (relis les corrections détaillées).";
+  if (note >= 9) return "Au-dessus de la moyenne — continue à enchaîner les problèmes type concours.";
+  if (skipped === BONUS_QUESTIONS.length) return "Niveau 2 non tenté — reviens quand tu te sens prêt !";
+  return "Niveau exigeant : reprends méthodiquement les corrections détaillées, elles couvrent les méthodes-clés.";
+}
+
+function getVerdict(note) {
+  if (note >= 18) return "Excellent ! Maîtrise remarquable du programme.";
+  if (note >= 16) return "Très bon résultat, niveau solide.";
+  if (note >= 14) return "Bon travail, des bases bien acquises.";
+  if (note >= 12) return "Résultat correct, continue de réviser.";
+  if (note >= 10) return "Tu as la moyenne, mais des chapitres sont à retravailler.";
+  if (note >= 8)  return "Encore quelques efforts à fournir, ne te décourage pas.";
+  if (note >= 5)  return "Il faut réviser plus en profondeur. Reprends les bases !";
+  return "Il y a beaucoup à reprendre, mais c'est en s'entraînant qu'on progresse.";
+}
+
+// ============================================================
+//  TÉLÉCHARGEMENT PDF
+// ============================================================
+function stripHTML(html) {
+  // Convertit HTML simple (math, frac, sup, sub) en texte plat lisible
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  // Gérer les fractions
+  tmp.querySelectorAll('.frac').forEach(f => {
+    const num = f.querySelector('.num')?.textContent || '';
+    const den = f.querySelector('.den')?.textContent || '';
+    f.replaceWith(`(${num}/${den})`);
+  });
+  // Gérer les exposants
+  tmp.querySelectorAll('sup').forEach(s => s.replaceWith(`^${s.textContent}`));
+  tmp.querySelectorAll('sub').forEach(s => s.replaceWith(`_${s.textContent}`));
+  return tmp.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function svgToPngDataURL(svgString, width = 280, height = 200) {
+  return new Promise((resolve) => {
+    const svg = svgString.trim();
+    const svg64 = btoa(unescape(encodeURIComponent(svg)));
+    const image64 = 'data:image/svg+xml;base64,' + svg64;
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const scale = 2; // résolution doublée pour netteté
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fffefa';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = () => resolve(null);
+    img.src = image64;
+  });
+}
+
+async function downloadResultsPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 18;
+  const maxWidth = pageWidth - 2 * margin;
+  let y = margin;
+
+  // Couleurs
+  const INK = [26, 37, 64];
+  const ACCENT = [217, 79, 55];
+  const INK_SOFT = [60, 70, 99];
+  const SUCCESS = [47, 107, 63];
+
+  // Helper saut de page
+  function ensureSpace(needed) {
+    if (y + needed > pageHeight - margin) {
+      doc.addPage();
+      y = margin;
+    }
+  }
+
+  function addWrappedText(text, options = {}) {
+    const fontSize = options.fontSize || 10;
+    const lineHeight = options.lineHeight || fontSize * 0.45;
+    const color = options.color || INK;
+    const style = options.style || 'normal';
+    doc.setFontSize(fontSize);
+    doc.setFont('helvetica', style);
+    doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(text, options.width || maxWidth);
+    for (const line of lines) {
+      ensureSpace(lineHeight);
+      doc.text(line, options.x || margin, y);
+      y += lineHeight;
+    }
+  }
+
+  // ====== EN-TÊTE ======
+  doc.setFillColor(...INK);
+  doc.rect(0, 0, pageWidth, 30, 'F');
+  doc.setFillColor(...ACCENT);
+  doc.rect(0, 30, pageWidth, 1.5, 'F');
+
+  doc.setTextColor(...ACCENT);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.text('ÉVALUATION · COLLÈGE', margin, 12);
+
+  doc.setTextColor(244, 237, 224);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Résultats — QCM Mathématiques', margin, 22);
+
+  y = 42;
+
+  // ====== INFOS ÉLÈVE ======
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+  doc.setDrawColor(201, 188, 160);
+  doc.setLineWidth(0.3);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 6;
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...INK_SOFT);
+  doc.text('ÉLÈVE', margin, y);
+  doc.text('DATE', margin + 60, y);
+  doc.text('HEURE', margin + 110, y);
+  y += 5;
+
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...INK);
+  doc.text(state.studentName || '—', margin, y);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text(dateStr.charAt(0).toUpperCase() + dateStr.slice(1), margin + 60, y);
+  doc.text(timeStr, margin + 110, y);
+  y += 4;
+  doc.setDrawColor(201, 188, 160);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 10;
+
+  // ====== SCORE NIVEAU 1 ======
+  let correctCount = 0, wrongCount = 0, skippedCount = 0;
+  QUESTIONS.forEach((q, i) => {
+    if (state.answers[i] === null) skippedCount++;
+    else if (state.answers[i] === q.correct) correctCount++;
+    else wrongCount++;
+  });
+  const note20 = Math.round((correctCount / QUESTIONS.length) * 20 * 10) / 10;
+  const elapsedSec = LEVEL1_DURATION - state.timeLeft;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...ACCENT);
+  doc.text('NIVEAU 1 — QCM COLLÈGE (6ᵉ · 5ᵉ · 4ᵉ)', margin, y);
+  y += 8;
+
+  // Bloc score
+  doc.setFillColor(255, 250, 240);
+  doc.setDrawColor(...INK);
+  doc.setLineWidth(0.4);
+  doc.rect(margin, y, maxWidth, 28, 'FD');
+
+  doc.setTextColor(...INK);
+  doc.setFontSize(32);
+  doc.setFont('helvetica', 'bold');
+  doc.text(note20.toString().replace('.', ','), margin + 8, y + 20);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...INK_SOFT);
+  doc.text('/ 20', margin + 40, y + 20);
+
+  doc.setFontSize(9);
+  doc.setTextColor(...SUCCESS);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`✓ ${correctCount} bonnes`, margin + 70, y + 10);
+  doc.setTextColor(...ACCENT);
+  doc.text(`✗ ${wrongCount} fausses`, margin + 70, y + 17);
+  doc.setTextColor(...INK_SOFT);
+  doc.text(`○ ${skippedCount} sans réponse`, margin + 70, y + 24);
+
+  doc.setTextColor(...INK_SOFT);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Temps écoulé : ${formatTime(elapsedSec)}`, margin + 130, y + 10);
+
+  y += 36;
+
+  // ====== DÉTAIL NIVEAU 1 ======
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.setTextColor(...INK);
+  ensureSpace(10);
+  doc.text('Détail des réponses', margin, y);
+  y += 6;
+
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = QUESTIONS[i];
+    const userAns = state.answers[i];
+    const answered = isAnswered(userAns, q);
+    const isCorrect = answered && checkAnswer(q, userAns);
+    const isSkipped = !answered;
+
+    ensureSpace(22);
+
+    // Pavé de gauche couleur
+    const stripColor = isSkipped ? INK_SOFT : (isCorrect ? SUCCESS : ACCENT);
+    doc.setFillColor(...stripColor);
+    doc.rect(margin, y, 1.2, 18, 'F');
+
+    // Numéro + chapitre
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(...INK_SOFT);
+    const typeLabel = q.type === 'qcm' ? 'QCM' : 'OUVERT';
+    doc.text(`Q${i + 1} · ${typeLabel} · ${stripHTML(q.chapitre)}`, margin + 3, y + 4);
+
+    // Statut
+    doc.setTextColor(...stripColor);
+    const statusText = isSkipped ? 'NON RÉPONDU' : (isCorrect ? 'CORRECT' : 'INCORRECT');
+    doc.text(statusText, pageWidth - margin - 30, y + 4);
+
+    // Question
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(...INK);
+    const qLines = doc.splitTextToSize(stripHTML(q.question), maxWidth - 6);
+    let lineY = y + 8;
+    for (const line of qLines.slice(0, 3)) {
+      doc.text(line, margin + 3, lineY);
+      lineY += 4;
+    }
+    y = lineY + 1;
+
+    // Réponses
+    doc.setFontSize(8);
+    if (!isCorrect && answered) {
+      doc.setTextColor(...ACCENT);
+      const userStr = q.type === 'qcm'
+        ? `${String.fromCharCode(65 + userAns)} — ${stripHTML(q.options[userAns])}`
+        : String(userAns);
+      const userLines = doc.splitTextToSize(`Ta réponse : ${userStr}`, maxWidth - 6);
+      for (const line of userLines) {
+        ensureSpace(4);
+        doc.text(line, margin + 3, y);
+        y += 3.5;
+      }
+    }
+    doc.setTextColor(...SUCCESS);
+    doc.setFont('helvetica', 'bold');
+    const correctStr = q.type === 'qcm'
+      ? `${String.fromCharCode(65 + q.correct)} — ${stripHTML(q.options[q.correct])}`
+      : (Array.isArray(q.correct) ? q.correct[0] : q.correct);
+    const correctLines = doc.splitTextToSize(`Bonne réponse : ${correctStr}`, maxWidth - 6);
+    for (const line of correctLines) {
+      ensureSpace(4);
+      doc.text(line, margin + 3, y);
+      y += 3.5;
+    }
+    y += 1;
+
+    // Explication (si présente)
+    if (q.explication) {
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(7.5);
+      doc.setTextColor(...INK_SOFT);
+      const expLines = doc.splitTextToSize(`→ ${stripHTML(q.explication)}`, maxWidth - 6);
+      for (const line of expLines) {
+        ensureSpace(3.5);
+        doc.text(line, margin + 3, y);
+        y += 3.2;
+      }
+    }
+    y += 3;
+  }
+
+  // ====== NIVEAU 2 (si joué) ======
+  if (state.bonusCompleted) {
+    doc.addPage();
+    y = margin;
+
+    let bCorrect = 0, bWrong = 0, bSkipped = 0;
+    BONUS_QUESTIONS.forEach((q, i) => {
+      if (!isAnswered(state.bonusAnswers[i], q)) bSkipped++;
+      else if (checkAnswer(q, state.bonusAnswers[i])) bCorrect++;
+      else bWrong++;
+    });
+    const bNote20 = Math.round((bCorrect / BONUS_QUESTIONS.length) * 20 * 10) / 10;
+    const bElapsed = BONUS_DURATION - state.bonusTimeLeft;
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...ACCENT);
+    doc.text('★ NIVEAU 2 — PROBLÈMES TYPE BREVET', margin, y);
+    y += 8;
+
+    // Bloc score
+    doc.setFillColor(26, 37, 64);
+    doc.rect(margin, y, maxWidth, 28, 'F');
+
+    doc.setTextColor(244, 237, 224);
+    doc.setFontSize(32);
+    doc.setFont('helvetica', 'bold');
+    doc.text(bNote20.toString().replace('.', ','), margin + 8, y + 20);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'normal');
+    doc.text('/ 20', margin + 40, y + 20);
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...ACCENT);
+    doc.text(`★ ${bCorrect} bonnes`, margin + 70, y + 10);
+    doc.setTextColor(244, 237, 224);
+    doc.text(`✗ ${bWrong} fausses`, margin + 70, y + 17);
+    doc.text(`○ ${bSkipped} sans réponse`, margin + 70, y + 24);
+
+    doc.text(`Temps : ${formatTime(bElapsed)}${state.bonusTimeUp ? ' (temps écoulé)' : ''}`, margin + 130, y + 10);
+
+    y += 36;
+
+    // Correction détaillée
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(...INK);
+    doc.text('Correction détaillée', margin, y);
+    y += 7;
+
+    for (let i = 0; i < BONUS_QUESTIONS.length; i++) {
+      const q = BONUS_QUESTIONS[i];
+      const userAns = state.bonusAnswers[i];
+      const answered = isAnswered(userAns, q);
+      const isCorrect = answered && checkAnswer(q, userAns);
+      const isSkipped = !answered;
+
+      // Estimer la place
+      const schemaSize = q.schema ? 50 : 0;
+      ensureSpace(80 + schemaSize);
+
+      const stripColor = isSkipped ? INK_SOFT : (isCorrect ? SUCCESS : ACCENT);
+
+      // Bandeau titre
+      doc.setFillColor(245, 240, 230);
+      doc.rect(margin, y, maxWidth, 8, 'F');
+      doc.setFillColor(...stripColor);
+      doc.rect(margin, y, 1.5, 8, 'F');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...INK_SOFT);
+      doc.text(`B${i + 1} · ${stripHTML(q.chapitre || 'Niveau 2')}`, margin + 4, y + 5.5);
+      doc.setTextColor(...stripColor);
+      const statusText = isSkipped ? 'NON RÉPONDU' : (isCorrect ? 'CORRECT' : 'INCORRECT');
+      doc.text(statusText, pageWidth - margin - 30, y + 5.5);
+      y += 11;
+
+      // Question
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(...INK);
+      const qText = stripHTML(q.question);
+      const qLines = doc.splitTextToSize(qText, maxWidth);
+      for (const line of qLines) {
+        ensureSpace(5);
+        doc.text(line, margin, y);
+        y += 4.5;
+      }
+      y += 1;
+
+      // Réponses
+      doc.setFontSize(9);
+      if (!isCorrect && answered) {
+        doc.setTextColor(...ACCENT);
+        doc.setFont('helvetica', 'normal');
+        const userStr = q.type === 'qcm'
+          ? `${String.fromCharCode(65 + userAns)} — ${stripHTML(q.options[userAns])}`
+          : String(userAns);
+        const userLines = doc.splitTextToSize(`Ta réponse : ${userStr}`, maxWidth);
+        for (const line of userLines) {
+          ensureSpace(5);
+          doc.text(line, margin, y);
+          y += 4.5;
+        }
+      }
+      doc.setTextColor(...SUCCESS);
+      doc.setFont('helvetica', 'bold');
+      const correctStr = q.type === 'qcm'
+        ? `${String.fromCharCode(65 + q.correct)} — ${stripHTML(q.options[q.correct])}`
+        : (Array.isArray(q.correct) ? q.correct[0] : q.correct);
+      const correctLines = doc.splitTextToSize(`Bonne réponse : ${correctStr}`, maxWidth);
+      for (const line of correctLines) {
+        ensureSpace(5);
+        doc.text(line, margin, y);
+        y += 4.5;
+      }
+      y += 2;
+
+      // Correction détaillée
+      doc.setFillColor(245, 240, 230);
+      const solutionText = stripHTML(q.solution);
+      // Découper le solution en lignes
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      const solLines = doc.splitTextToSize(solutionText, maxWidth - 8);
+      const solHeight = solLines.length * 4 + 8;
+      ensureSpace(solHeight);
+      doc.rect(margin, y, maxWidth, solHeight, 'F');
+      doc.setDrawColor(...INK_SOFT);
+      doc.setLineWidth(0.5);
+      doc.line(margin, y, margin, y + solHeight);
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...ACCENT);
+      doc.text('CORRECTION DÉTAILLÉE', margin + 4, y + 5);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...INK);
+      let solY = y + 10;
+      for (const line of solLines) {
+        doc.text(line, margin + 4, solY);
+        solY += 4;
+      }
+      y += solHeight + 3;
+
+      // Schéma si dispo
+      if (q.schema) {
+        ensureSpace(50);
+        const pngData = await svgToPngDataURL(q.schema, 280, 200);
+        if (pngData) {
+          const imgWidth = 80;
+          const imgHeight = 57;
+          const imgX = margin + (maxWidth - imgWidth) / 2;
+          doc.setFillColor(255, 254, 250);
+          doc.rect(imgX - 3, y, imgWidth + 6, imgHeight + 8, 'F');
+          doc.setDrawColor(201, 188, 160);
+          if (typeof doc.setLineDashPattern === 'function') {
+            doc.setLineDashPattern([1, 1], 0);
+          }
+          doc.rect(imgX - 3, y, imgWidth + 6, imgHeight + 8, 'S');
+          if (typeof doc.setLineDashPattern === 'function') {
+            doc.setLineDashPattern([], 0);
+          }
+          doc.addImage(pngData, 'PNG', imgX, y + 2, imgWidth, imgHeight);
+          doc.setFontSize(7);
+          doc.setTextColor(...INK_SOFT);
+          doc.setFont('helvetica', 'normal');
+          doc.text('SCHÉMA EXPLICATIF', imgX, y + imgHeight + 6);
+          y += imgHeight + 12;
+        }
+      }
+      y += 4;
+    }
+  }
+
+  // ====== PIED DE PAGE SUR CHAQUE PAGE ======
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...INK_SOFT);
+    doc.text(`Page ${p} / ${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    doc.text(`QCM Mathématiques Collège — ${state.studentName || 'élève'}`, margin, pageHeight - 8);
+  }
+
+  // ====== SAUVEGARDE ======
+  const safeName = (state.studentName || 'eleve').toLowerCase().replace(/[^a-z0-9]+/gi, '-');
+  const datePart = now.toISOString().slice(0, 10);
+  doc.save(`resultats-qcm-maths-${safeName}-${datePart}.pdf`);
+}
+
+// ============================================================
+//  PAUSE / REPRISE DU CHRONO
+// ============================================================
+function pauseQuiz() {
+  if (state.paused || !state.timerInterval) return;
+  state.paused = true;
+  clearInterval(state.timerInterval);
+  state.timerInterval = null;
+  els.timer.classList.add('paused');
+  els.pauseOverlay.classList.add('active');
+}
+
+function resumeQuiz() {
+  if (!state.paused) return;
+  state.paused = false;
+  els.timer.classList.remove('paused');
+  els.pauseOverlay.classList.remove('active');
+  // Relancer le timer
+  state.timerInterval = setInterval(() => {
+    state.timeLeft--;
+    updateTimerDisplay();
+    if (state.timeLeft <= 0) {
+      clearInterval(state.timerInterval);
+      finishQuiz(true);
+    }
+  }, 1000);
+}
+
+function pauseBonus() {
+  if (state.bonusPaused || !state.bonusTimerInterval) return;
+  state.bonusPaused = true;
+  clearInterval(state.bonusTimerInterval);
+  state.bonusTimerInterval = null;
+  els.bonusTimer.classList.add('paused');
+  els.bonusPauseOverlay.classList.add('active');
+}
+
+function resumeBonus() {
+  if (!state.bonusPaused) return;
+  state.bonusPaused = false;
+  els.bonusTimer.classList.remove('paused');
+  els.bonusPauseOverlay.classList.remove('active');
+  // Relancer
+  state.bonusTimerInterval = setInterval(() => {
+    state.bonusTimeLeft--;
+    updateBonusTimerDisplay();
+    if (state.bonusTimeLeft <= 0) {
+      clearInterval(state.bonusTimerInterval);
+      finishBonus(true);
+    }
+  }, 1000);
+}
+
+// ============================================================
+//  ÉVÉNEMENTS
+// ============================================================
+els.startBtn.addEventListener('click', () => {
+  const name = els.nameInput.value.trim();
+  if (!name) {
+    els.nameError.classList.add('show');
+    els.nameInput.classList.add('error');
+    els.nameInput.focus();
+    return;
+  }
+  els.nameError.classList.remove('show');
+  els.nameInput.classList.remove('error');
+  state.studentName = name;
+  showScreen('quiz');
+  renderQuestion();
+  startTimer();
+});
+
+// Le message d'erreur disparaît dès qu'on tape
+els.nameInput.addEventListener('input', () => {
+  if (els.nameInput.value.trim()) {
+    els.nameError.classList.remove('show');
+    els.nameInput.classList.remove('error');
+  }
+});
+
+els.nextBtn.addEventListener('click', () => {
+  if (state.currentIndex === QUESTIONS.length - 1) {
+    finishQuiz();
+  } else {
+    state.currentIndex++;
+    renderQuestion();
+  }
+});
+
+els.prevBtn.addEventListener('click', () => {
+  if (state.currentIndex > 0) {
+    state.currentIndex--;
+    renderQuestion();
+  }
+});
+
+// Listeners pause
+els.pauseBtn.addEventListener('click', pauseQuiz);
+els.resumeBtn.addEventListener('click', resumeQuiz);
+els.bonusPauseBtn.addEventListener('click', pauseBonus);
+els.bonusResumeBtn.addEventListener('click', resumeBonus);
+
+// Raccourci clavier : touche P (et Espace si pas dans un input) pour pause/reprise
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'p' || e.key === 'P') {
+    e.preventDefault();
+    // Détecter quel écran est actif
+    if (!screens.quiz.classList.contains('hidden')) {
+      state.paused ? resumeQuiz() : pauseQuiz();
+    } else if (!screens.bonus.classList.contains('hidden')) {
+      state.bonusPaused ? resumeBonus() : pauseBonus();
+    }
+  } else if (e.key === 'Escape') {
+    // Echap = reprendre si en pause
+    if (state.paused) resumeQuiz();
+    else if (state.bonusPaused) resumeBonus();
+  }
+});
+
+els.restartBtn.addEventListener('click', () => {
+  state.currentIndex = 0;
+  state.answers.fill(null);
+  state.timeLeft = 2700;
+  state.startedAt = null;
+  state.finishedAt = null;
+  els.nameInput.value = '';
+  state.studentName = '';
+  // Reset bonus
+  state.bonusIndex = 0;
+  state.bonusAnswers.fill(null);
+  state.bonusCompleted = false;
+  state.bonusTimeLeft = BONUS_DURATION;
+  state.bonusTimeUp = false;
+  if (state.bonusTimerInterval) clearInterval(state.bonusTimerInterval);
+  document.body.classList.remove('bonus-mode');
+  els.bonusCtaWrapper.innerHTML = '';
+  els.bonusResultsWrapper.innerHTML = '';
+  // Reset visuel timer
+  els.timer.classList.remove('warning', 'critical');
+  els.bonusTimer.classList.remove('warning', 'critical');
+  // Reset pause
+  state.paused = false;
+  state.bonusPaused = false;
+  els.timer.classList.remove('paused');
+  els.bonusTimer.classList.remove('paused');
+  els.pauseOverlay.classList.remove('active');
+  els.bonusPauseOverlay.classList.remove('active');
+  showScreen('intro');
+});
+
+// ====== Avertissement bonus ======
+els.startBonusConfirmBtn.addEventListener('click', startBonus);
+els.backResultsBtn.addEventListener('click', () => showScreen('results'));
+
+// ====== Téléchargement PDF ======
+els.downloadBtn.addEventListener('click', downloadResultsPDF);
+
+// ====== Niveau Bonus : navigation ======
+els.bonusNextBtn.addEventListener('click', () => {
+  if (state.bonusIndex === BONUS_QUESTIONS.length - 1) {
+    finishBonus();
+  } else {
+    state.bonusIndex++;
+    renderBonusQuestion();
+  }
+});
+
+els.bonusPrevBtn.addEventListener('click', () => {
+  if (state.bonusIndex > 0) {
+    state.bonusIndex--;
+    renderBonusQuestion();
+  }
+});
+
+// Raccourcis clavier
+document.addEventListener('keydown', (e) => {
+  // Quiz principal
+  if (!screens.quiz.classList.contains('hidden')) {
+    if (e.key === 'ArrowRight') els.nextBtn.click();
+    if (e.key === 'ArrowLeft' && !els.prevBtn.disabled) els.prevBtn.click();
+    if (['1','2','3','4'].includes(e.key)) {
+      const idx = parseInt(e.key) - 1;
+      const radios = els.questionContainer.querySelectorAll('input[type="radio"]');
+      if (radios[idx]) {
+        radios[idx].checked = true;
+        radios[idx].dispatchEvent(new Event('change'));
+      }
+    }
+    return;
+  }
+  // Quiz bonus
+  if (!screens.bonus.classList.contains('hidden')) {
+    if (e.key === 'ArrowRight') els.bonusNextBtn.click();
+    if (e.key === 'ArrowLeft' && !els.bonusPrevBtn.disabled) els.bonusPrevBtn.click();
+    if (['1','2','3','4'].includes(e.key)) {
+      const idx = parseInt(e.key) - 1;
+      const radios = els.bonusContainer.querySelectorAll('input[type="radio"]');
+      if (radios[idx]) {
+        radios[idx].checked = true;
+        radios[idx].dispatchEvent(new Event('change'));
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
